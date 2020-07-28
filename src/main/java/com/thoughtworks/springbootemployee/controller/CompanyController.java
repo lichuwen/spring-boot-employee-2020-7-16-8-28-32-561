@@ -51,12 +51,8 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public Company updateCompanyInformation(@RequestBody Company company) {
-        for (int index = 0; index < companies.size(); index++) {
-            if (companies.get(index).getCompanyID() == company.getCompanyID()) {
-                companies.set(index, company);
-            }
-        }
+    public Company updateCompanyInformation(@PathVariable Integer id,@RequestBody Company company) {
+        companies.set(id, company);
         return company;
     }
 
