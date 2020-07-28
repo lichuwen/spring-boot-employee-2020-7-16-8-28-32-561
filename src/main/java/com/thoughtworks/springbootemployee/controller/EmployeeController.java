@@ -53,4 +53,14 @@ public class EmployeeController {
         return employee;
     }
 
+    @PutMapping("/{id}")
+    public Employee updateEmployeeInformation(@PathVariable Integer id,@RequestBody Employee employee) {
+        for (int index = 0; index < employees.size(); index++) {
+            if (employees.get(index).getEmployeeID() == id){
+                employees.set(index, employee);
+                break;
+            }
+        }
+        return employee;
+    }
 }
