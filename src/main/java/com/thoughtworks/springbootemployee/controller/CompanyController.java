@@ -10,10 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/hello")
-public class HelloController {
-    @GetMapping(path = "/{userName}")
-    public String getAll(@PathVariable String userName) {
-        return "Hello:" + userName;
+@RequestMapping("/companies")
+public class CompanyController {
+    @GetMapping
+    public List<Company> getAll() {
+        List<Company> companies = new ArrayList<>();
+        companies.add(new Company(1));
+        companies.add(new Company(2));
+        companies.add(new Company(3));
+        return companies;
     }
 }
