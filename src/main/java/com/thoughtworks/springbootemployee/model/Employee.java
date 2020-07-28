@@ -9,4 +9,11 @@ public class Employee {
         this.name = name;
     }
 
+    public int getEmployeeId() {
+        return EmployeeId;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
