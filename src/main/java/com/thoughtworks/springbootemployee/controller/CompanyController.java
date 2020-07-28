@@ -13,12 +13,15 @@ public class CompanyController {
     List<Company> companies = new ArrayList<>();
     List<Employee> employees = new ArrayList<>();
 
-    @GetMapping
-    public List<Company> getCompanyInformation(@RequestParam(name = "page", required = false) Integer page, @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+    CompanyController(){
         employees.add(new Employee(1, "karen"));
         companies.add(new Company(1, 100, employees));
         companies.add(new Company(2, 100, employees));
         companies.add(new Company(3, 100, employees));
+    }
+
+    @GetMapping
+    public List<Company> getCompanyInformation(@RequestParam(name = "page", required = false) Integer page, @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         if (page == null)
             return companies;
         return companies.subList(page - 1, pageSize - 1);
@@ -52,7 +55,12 @@ public class CompanyController {
 
     @PutMapping("/{id}")
     public Company updateCompanyInformation(@PathVariable Integer id,@RequestBody Company company) {
-        companies.set(id, company);
+        for (int index = 0; index < companies.size(); index++) {
+            if (companies.get(index).getCompanyID() == id){
+                companies.set(index, company);
+                break;
+            }
+        }
         return company;
     }
 
