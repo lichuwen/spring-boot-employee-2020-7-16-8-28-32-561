@@ -10,10 +10,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
+    List<Company> companies = new ArrayList<>();
+    List<Employee> employees = new ArrayList<>();
+
     @GetMapping
     public List<Company> getCompanyInformation(@RequestParam(name = "page" , required = false) Integer page, @RequestParam(name = "pageSize",required = false) Integer pageSize) {
-        List<Company> companies = new ArrayList<>();
-        List<Employee> employees = new ArrayList<>();
         employees.add(new Employee(1,"karen"));
         companies.add(new Company(1,100,employees));
         companies.add(new Company(2,100,employees));
@@ -25,8 +26,17 @@ public class CompanyController {
 
     @PostMapping
     public Company addCompany(@RequestBody Company company){
-        List<Company> companies = new ArrayList<>();
         companies.add(company);
+        return company;
+    }
+
+    @PutMapping("/{id}")
+    public Company updateCompanyInformation(@RequestBody Company company){
+        for (int index=0; index<companies.size(); index++){
+            if(companies.get(index).getCompanyID() == company.getCompanyID()){
+                companies.set(index,company);
+            }
+        }
         return company;
     }
 
