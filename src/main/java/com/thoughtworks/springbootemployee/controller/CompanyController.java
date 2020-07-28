@@ -22,6 +22,14 @@ public class CompanyController {
             return companies;
         return companies.subList(page-1,pageSize-1);
     }
+
+    @PostMapping
+    public Company addCompany(@RequestBody Company company){
+        List<Company> companies = new ArrayList<>();
+        companies.add(company);
+        return company;
+    }
+
 //    @GetMapping()
 //    public List<Company> getCertainCompany() {
 //        List<Company> companies = new ArrayList<>();
