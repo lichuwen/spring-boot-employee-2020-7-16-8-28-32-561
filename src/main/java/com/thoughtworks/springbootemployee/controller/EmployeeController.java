@@ -35,4 +35,22 @@ public class EmployeeController {
         }
         return new Employee();
     }
+
+//    @GetMapping(path = "/{gender}")
+//    public List<Employee> getEmployeesInCompany(@PathVariable String gender) {
+//        List<Employee> genderEmployees = new ArrayList<>();
+//        for (Employee singleEmployee : employees) {
+//            if (singleEmployee.getGender().equals(gender)) {
+//                genderEmployees.add(singleEmployee);
+//            }
+//        }
+//        return genderEmployees;
+//    }
+
+    @PostMapping
+    public Employee addEmployee(@RequestBody Employee employee) {
+        employees.add(employee);
+        return employee;
+    }
+
 }
