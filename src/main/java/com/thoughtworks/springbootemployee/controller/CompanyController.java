@@ -20,4 +20,18 @@ public class CompanyController {
         companies.add(new Company(3));
         return companies;
     }
+
+    @GetMapping(path = "/{id}")
+    public Company getCertainCompany(@PathVariable int id) {
+        List<Company> companies = new ArrayList<>();
+        companies.add(new Company(1));
+        companies.add(new Company(2));
+        companies.add(new Company(3));
+        for (Company company: companies) {
+            if(company.getCompanyID() == id) {
+                return company;
+            }
+        }
+        return null;
+    }
 }
