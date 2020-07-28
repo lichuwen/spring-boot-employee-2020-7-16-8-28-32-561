@@ -1,18 +1,12 @@
 package com.thoughtworks.springbootemployee.model;
 
 public class Employee {
-    private int id;
+    private int EmployeeId;
     private String name;
-    private int age;
-    private String gender;
-    private int salary;
 
-    public Employee(int id, String name, int age, String gender, int salary) {
-        this.id = id;
+    public Employee(int EmployeeId, String name) {
+        this.EmployeeId = EmployeeId;
         this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.salary = salary;
     }
 
 }

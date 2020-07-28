@@ -4,12 +4,12 @@ import java.util.List;
 
 public class Company {
 
-    private String companyName;
+    private int companyID;
     private int employeesNumber;
     List<Employee> employees;
 
-    public Company(String companyName, int employeesNumber, List<Employee> employees) {
-        this.companyName = companyName;
+    public Company(int companyID, int employeesNumber, List<Employee> employees) {
+        this.companyID = companyID;
         this.employeesNumber = employeesNumber;
         this.employees = employees;
     }
