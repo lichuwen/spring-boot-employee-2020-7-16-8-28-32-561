@@ -8,6 +8,9 @@ public class Company {
     private int employeesNumber;
     List<Employee> employees;
 
+    public Company() {
+    }
+
     public Company(int companyID, int employeesNumber, List<Employee> employees) {
         this.companyID = companyID;
         this.employeesNumber = employeesNumber;
