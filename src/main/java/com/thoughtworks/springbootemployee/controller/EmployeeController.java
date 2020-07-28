@@ -2,10 +2,7 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,5 +24,15 @@ public class EmployeeController {
         int pageStart = (page - 1) * pageSize;
         int pageEnd = pageStart + pageSize;
         return employees.subList(pageStart, pageEnd);
+    }
+
+    @GetMapping("/{id}")
+    public Employee getCertainEmployee(@PathVariable Integer id) {
+        for (Employee singleEmployee : employees) {
+            if (singleEmployee.getEmployeeId() == id) {
+                return singleEmployee;
+            }
+        }
+        return new Employee();
     }
 }
