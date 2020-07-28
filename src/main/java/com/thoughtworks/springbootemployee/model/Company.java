@@ -29,4 +29,11 @@ public class Company {
         return employeesNumber;
     }
 
+    public void setEmployeesNumber(int employeesNumber) {
+        this.employeesNumber = employeesNumber;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
 }

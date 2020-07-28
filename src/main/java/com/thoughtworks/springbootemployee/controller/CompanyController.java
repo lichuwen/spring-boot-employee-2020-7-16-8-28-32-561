@@ -40,6 +40,17 @@ public class CompanyController {
         return company;
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteEmployees(@PathVariable Integer id){
+        for (int index=0; index<companies.size(); index++){
+            if(companies.get(index).getCompanyID() == id){
+                companies.get(index).setEmployeesNumber(0);
+                companies.get(index).setEmployees(new ArrayList<>());
+            }
+        }
+        return "delete success";
+    }
+
 //    @GetMapping()
 //    public List<Company> getCertainCompany() {
 //        List<Company> companies = new ArrayList<>();
