@@ -18,6 +18,8 @@ public class CompanyController {
         companies.add(new Company(1,100,employees));
         companies.add(new Company(2,100,employees));
         companies.add(new Company(3,100,employees));
+        if(page == null)
+            return companies;
         return companies.subList(page-1,pageSize-1);
     }
 //    @GetMapping()
