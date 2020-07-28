@@ -56,11 +56,22 @@ public class EmployeeController {
     @PutMapping("/{id}")
     public Employee updateEmployeeInformation(@PathVariable Integer id,@RequestBody Employee employee) {
         for (int index = 0; index < employees.size(); index++) {
-            if (employees.get(index).getEmployeeID() == id){
+            if (employees.get(index).getEmployeeId() == id){
                 employees.set(index, employee);
                 break;
             }
         }
         return employee;
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteEmployee(@PathVariable Integer id) {
+        for (int index = 0; index < employees.size(); index++) {
+            if (employees.get(index).getEmployeeId() == id){
+                employees.remove(id);
+                break;
+            }
+        }
+        return "delete success";
     }
 }
