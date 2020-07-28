@@ -24,6 +24,16 @@ public class CompanyController {
         return companies.subList(page-1,pageSize-1);
     }
 
+    @GetMapping("/{id}")
+    public Company getCertainCompany(@PathVariable Integer id) {
+        for (Company singleCompany:companies){
+            if(singleCompany.getCompanyID() == id){
+                return singleCompany;
+            }
+        }
+        return new Company();
+    }
+
     @PostMapping
     public Company addCompany(@RequestBody Company company){
         companies.add(company);
@@ -51,13 +61,7 @@ public class CompanyController {
         return "delete success";
     }
 
-//    @GetMapping()
-//    public List<Company> getCertainCompany() {
-//        List<Company> companies = new ArrayList<>();
-//        companies.add(new Company(9,null));
-//        companies.add(new Company(2,null));
-//        return companies;
-//    }
+
 //
 //    @GetMapping(path = "/{id}")
 //    public Company getCertainCompany(@PathVariable int id) {
