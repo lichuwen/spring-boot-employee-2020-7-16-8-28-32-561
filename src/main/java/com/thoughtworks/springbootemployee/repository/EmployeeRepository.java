@@ -1,24 +1,11 @@
 package com.thoughtworks.springbootemployee.repository;
 
 import com.thoughtworks.springbootemployee.model.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeRepository {
-    public List<Employee> getAllEmployees() {
-        return new ArrayList<>();
-    }
+public interface EmployeeRepository extends JpaRepository<Employee,Integer> {
+    List<Employee> findByGender(String gender);
 
-    public Employee addEmployee(Employee employee) {
-        return null;
-    }
-
-    public Employee updateEmployee(Integer employeeId, Employee employee) {
-        return null;
-    }
-
-    public Employee deleteEmployee(Integer employeeId) {
-        return null;
-    }
 }
