@@ -1,70 +1,54 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
-    List<Employee> employees = new ArrayList<>();
-//    EmployeeData employeeData = new EmployeeData(employees);
+    @Autowired
+    EmployeeService employeeService;
+
+
     @GetMapping
-    public List<Employee> getEmployeeInformation(@RequestParam(name = "page", required = false) Integer page,
-                                                 @RequestParam(name = "pageSize", required = false) Integer pageSize,
-                                                 @RequestParam(name = "gender", required = false) String gender) {
-        List<Employee> tempEmployees = this.employees;
-        if (gender != null) {
-            tempEmployees = employees.stream()
-                    .filter(singleEmployee -> singleEmployee.getGender().equals(gender))
-                    .collect(Collectors.toList());
-        }
-        if(page != null && pageSize != null){
-            int pageStart = (page - 1) * pageSize;
-            int pageEnd = pageStart + pageSize;
-            tempEmployees = tempEmployees.subList(pageStart, pageEnd);
-        }
-        return tempEmployees;
+    public List<Employee> getEmployeeInformation() {
+        return employeeService.getAllEmployees();
     }
+
+    @GetMapping(params = {"gender"})
+    public List<Employee> getEmployeesByGender(@RequestParam(name = "gender", required = false) String gender) {
+        return employeeService.getEmployeesByGender(gender);
+    }
+
+    @GetMapping(params = {"page", "pageSize"})
+    public Page<Employee> getEmployeesByPage(@RequestParam(name = "page", required = false) Integer page,
+                                             @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+        return employeeService.getEmployeesByPage(page, pageSize);
+    }
+
 
     @GetMapping("/{id}")
     public Employee getCertainEmployee(@PathVariable Integer id) {
-        for (Employee singleEmployee : employees) {
-            if (singleEmployee.getEmployeeId() == id) {
-                return singleEmployee;
-            }
-        }
-        return new Employee();
+        return employeeService.getCertainEmployee(id);
     }
 
     @PostMapping
     public Employee addEmployee(@RequestBody Employee employee) {
-        employees.add(employee);
-        return employee;
+        return employeeService.addNewEmployee(employee);
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployeeInformation(@PathVariable Integer id,@RequestBody Employee employee) {
-        for (int index = 0; index < employees.size(); index++) {
-            if (employees.get(index).getEmployeeId() == id){
-                employees.set(index, employee);
-                break;
-            }
-        }
-        return employee;
+    public Employee updateEmployeeInformation(@PathVariable Integer id, @RequestBody Employee employee) {
+        return employeeService.updateEmployee(id, employee);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteEmployee(@PathVariable Integer id) {
-        for (int index = 0; index < employees.size(); index++) {
-            if (employees.get(index).getEmployeeId() == id){
-                employees.remove(index);
-                break;
-            }
-        }
-        return "delete success";
+    public Employee deleteEmployee(@PathVariable Integer id) {
+        return employeeService.deleteEmployee(id);
     }
 }

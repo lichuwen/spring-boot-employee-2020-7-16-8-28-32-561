@@ -22,15 +22,27 @@ public class Employee {
         this.gender = gender;
     }
 
-    public int getEmployeeId() {
+    public Integer getEmployeeId() {
         return employeeId;
+    }
+
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getGender() {
         return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }
