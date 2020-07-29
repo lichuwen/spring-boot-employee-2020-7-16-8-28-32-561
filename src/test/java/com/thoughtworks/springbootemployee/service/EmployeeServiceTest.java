@@ -60,7 +60,17 @@ public class EmployeeServiceTest {
         List<Employee> employeeByPage = employeeService.getEmployeesByPage(page, pageSize);
         //then
         assertEquals(pageSize, employeeByPage.size());
+    }
 
+    @Test
+    void should_return_female_employees_when_get_employees_by_gender_given_gender(){
+        //given
+        String gender =  "female";
+        //when
+        List<Employee> employeesByGender = employeeService.getEmployeesByGender(gender);
+        //then
+        assertTrue(employeesByGender.size()>0);
+        assertEquals(gender,employeesByGender.get(0).getGender());
     }
 
 
