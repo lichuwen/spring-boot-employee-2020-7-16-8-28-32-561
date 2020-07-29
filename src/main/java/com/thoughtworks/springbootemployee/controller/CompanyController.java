@@ -1,7 +1,4 @@
 package com.thoughtworks.springbootemployee.controller;
-
-import com.thoughtworks.springbootemployee.reposity.CompanyData;
-import com.thoughtworks.springbootemployee.reposity.EmployeeData;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +11,6 @@ import java.util.List;
 public class CompanyController {
     List<Company> companies = new ArrayList<>();
     List<Employee> employees = new ArrayList<>();
-    EmployeeData employeeData = new EmployeeData(employees);
-    CompanyData companyData = new CompanyData(companies,employees);
 
     @GetMapping
     public List<Company> getCompanyInformation(@RequestParam(name = "page", required = false) Integer page, @RequestParam(name = "pageSize", required = false) Integer pageSize) {
@@ -66,10 +61,10 @@ public class CompanyController {
     //todo
     @DeleteMapping("/{id}")
     public String deleteEmployees(@PathVariable Integer id) {
-        for (int index = 0; index < companies.size(); index++) {
-            if (companies.get(index).getCompanyID() == id) {
-                companies.get(index).setEmployeesNumber(0);
-                companies.get(index).setEmployees(new ArrayList<>());
+        for (Company company : companies) {
+            if (company.getCompanyID() == id) {
+                company.setEmployeesNumber(0);
+                company.setEmployees(new ArrayList<>());
             }
         }
         return "delete success";

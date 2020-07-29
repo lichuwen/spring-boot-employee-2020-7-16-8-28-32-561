@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
-public class companyServiceTest {
+public class CompanyServiceTest {
     private CompanyRepository companyRepository;
     private CompanyService companyService;
 
