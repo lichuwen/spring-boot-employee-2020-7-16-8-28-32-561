@@ -19,4 +19,8 @@ public class EmployeeService {
     public Employee getCertainEmployee(Integer employeeId) {
         return employeeRepository.getAllEmployees().stream().filter(employee -> employee.getEmployeeId() == employeeId).findFirst().orElse(null);
     }
+
+    public List<Employee> getEmployeesByPage(Integer page, Integer pageSize) {
+        return employeeRepository.getAllEmployees().subList((page-1)*pageSize,page*pageSize);
+    }
 }

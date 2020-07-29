@@ -51,6 +51,17 @@ public class EmployeeServiceTest {
         assertEquals(employeeId, employee.getEmployeeId());
     }
 
+    @Test
+    void should_return_employees_by_page_when_get_employees_by_page_given_page_and_page_size() {
+        //given
+        Integer page = 1;
+        Integer pageSize = 2;
+        //when
+        List<Employee> employeeByPage = employeeService.getEmployeesByPage(page, pageSize);
+        //then
+        assertEquals(pageSize, employeeByPage.size());
+
+    }
 
 
 
