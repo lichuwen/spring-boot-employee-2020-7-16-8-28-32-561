@@ -1,24 +1,11 @@
 package com.thoughtworks.springbootemployee.repository;
 
 import com.thoughtworks.springbootemployee.model.Company;
+import com.thoughtworks.springbootemployee.model.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public class CompanyRepository {
-    public List<Company> getAll() {
-        return null;
-    }
+public interface CompanyRepository extends JpaRepository<Company,Integer> {
 
-    public Company addCompany(Company company) {
-        return company;
-    }
-
-
-    public Company updateCompany(Integer companyId, Company company) {
-        return company;
-    }
-
-    public Company deleteCompany(Integer companyId) {
-        return null;
-    }
 }

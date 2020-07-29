@@ -1,11 +1,15 @@
 package com.thoughtworks.springbootemployee.model;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
 public class Company {
-
-    private int companyID;
-    private int employeesNumber;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer companyID;
+    private Integer employeesNumber;
+    @OneToMany
     List<Employee> employees;
 
     public Company() {
@@ -21,11 +25,11 @@ public class Company {
         return employees;
     }
 
-    public int getCompanyID() {
+    public Integer getCompanyID() {
         return companyID;
     }
 
-    public int getEmployeesNumber() {
+    public Integer getEmployeesNumber() {
         return employeesNumber;
     }
 
