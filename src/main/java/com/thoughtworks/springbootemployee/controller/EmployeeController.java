@@ -1,6 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
-import com.thoughtworks.springbootemployee.model.Company;
+import com.thoughtworks.springbootemployee.data.EmployeeData;
 import com.thoughtworks.springbootemployee.model.Employee;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,12 +12,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/employees")
 public class EmployeeController {
     List<Employee> employees = new ArrayList<>();
-
-    public EmployeeController() {
-        employees.add(new Employee(1, "karen","male"));
-        employees.add(new Employee(2, "jeany","female"));
-        employees.add(new Employee(3, "woody","male"));
-    }
+    EmployeeData employeeData = new EmployeeData(employees);
     @GetMapping
     public List<Employee> getEmployeeInformation(@RequestParam(name = "page", required = false) Integer page,
                                                  @RequestParam(name = "pageSize", required = false) Integer pageSize,
