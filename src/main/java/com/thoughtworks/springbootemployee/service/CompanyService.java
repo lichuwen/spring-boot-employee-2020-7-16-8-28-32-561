@@ -32,4 +32,21 @@ public class CompanyService {
                  .map(Company::getEmployees)
                  .findFirst().orElse(new ArrayList<>());
     }
+
+    public List<Company> getCompaniesByPage(Integer page, Integer pageSize) {
+        List<Company> companyArraysList =  companyRepository.getAll();
+        int startPage = (page - 1)  * pageSize;
+        int endPage = startPage + pageSize;
+        return companyArraysList.subList(startPage,endPage
+        );
+    }
+
+
+    public Company addNewCompany(Company company) {
+        return companyRepository.addCompany(company);
+    }
+
+    public Company updateCompany(Integer companyId, Company company) {
+        return companyRepository.updateCompany(companyId, company);
+    }
 }
