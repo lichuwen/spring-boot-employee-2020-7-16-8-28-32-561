@@ -13,7 +13,7 @@ public class Company {
 
     public Company(int companyID, int employeesNumber, List<Employee> employees) {
         this.companyID = companyID;
-        this.employeesNumber = employeesNumber;
+        this.employeesNumber = employees.size();
         this.employees = employees;
     }
 
