@@ -13,4 +13,8 @@ public class EmployeeRepository {
     public Employee addEmployee(Employee employee) {
         return null;
     }
+
+    public Employee updateEmployee(Integer employeeId, Employee employee) {
+        return null;
+    }
 }

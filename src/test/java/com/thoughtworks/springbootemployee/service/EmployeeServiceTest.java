@@ -7,12 +7,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 public class EmployeeServiceTest {
@@ -32,6 +34,7 @@ public class EmployeeServiceTest {
                         )
                 );
         when(employeeRepository.addEmployee(any(Employee.class))).thenReturn(new Employee());
+        when(employeeRepository.updateEmployee(anyInt(),any(Employee.class))).thenReturn(new Employee(1,"henry","male"));
         this.employeeService = new EmployeeService(employeeRepository);
     }
 
@@ -87,6 +90,17 @@ public class EmployeeServiceTest {
 
         //then
         assertNotNull(newEmployee);
+    }
+
+    @Test
+    void should_update_a_employee_when_update_employee_given_employee_and_employee_id() {
+        //given
+        Integer employeeId = 1;
+        Employee employee = new Employee(1, "henry", "male");
+        //when
+        Employee updatedEmployee = employeeService.updateEmployee(employeeId,employee);
+        //then
+        assertEquals(employeeId,updatedEmployee.getEmployeeId());
     }
 
 }
