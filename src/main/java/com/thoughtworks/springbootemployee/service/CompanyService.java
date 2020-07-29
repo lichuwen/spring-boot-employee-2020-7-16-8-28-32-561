@@ -4,12 +4,16 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 
+@Service
 public class CompanyService {
     private final CompanyRepository companyRepository;
 
@@ -18,39 +22,54 @@ public class CompanyService {
     }
 
     public List<Company> getAllCompanies() {
-        return companyRepository.getAll();
+        return companyRepository.findAll();
     }
 
     public Company getCertainCompany(Integer companyId) {
-        List<Company> companyArraysList =  companyRepository.getAll();
-        return companyArraysList.stream().filter(company -> company.getCompanyID() == companyId).findFirst().orElse(null);
+        return companyRepository.findById(companyId).orElse(null);
     }
 
     public List<Employee> getEmployeesInCompany(Integer companyId) {
-         return companyRepository.getAll().stream()
-                 .filter(company -> company.getCompanyID() == companyId)
-                 .map(Company::getEmployees)
-                 .findFirst().orElse(new ArrayList<>());
+        Optional<Company> byId = companyRepository.findById(companyId);
+        if(byId.isPresent()){
+            return byId.get().getEmployees();
+        }else {
+            return new ArrayList<>();
+        }
     }
 
-    public List<Company> getCompaniesByPage(Integer page, Integer pageSize) {
-        List<Company> companyArraysList =  companyRepository.getAll();
-        int startPage = (page - 1)  * pageSize;
-        int endPage = startPage + pageSize;
-        return companyArraysList.subList(startPage,endPage
-        );
+    public Page<Company> getCompaniesByPage(Integer page, Integer pageSize) {
+        return companyRepository.findAll(PageRequest.of(page, pageSize));
     }
 
 
     public Company addNewCompany(Company company) {
-        return companyRepository.addCompany(company);
+        return companyRepository.save(company);
     }
 
     public Company updateCompany(Integer companyId, Company company) {
-        return companyRepository.updateCompany(companyId, company);
+        Optional<Company> byId = companyRepository.findById(companyId);
+        if(byId.isPresent()){
+            //
+            Company oldCompany = byId.get();
+            if(company.getEmployeesNumber()!=null){
+                oldCompany.setEmployeesNumber(company.getEmployeesNumber());
+            }
+            if(company.getEmployees()!=null){
+                oldCompany.setEmployees(company.getEmployees());
+            }
+            return companyRepository.save(oldCompany);
+        }else {
+            return null;
+        }
     }
 
     public Company deleteCompany(Integer companyId) {
-        return companyRepository.deleteCompany(companyId);
+        Optional<Company> optional = companyRepository.findById(companyId);
+        if(optional.isPresent()){
+            companyRepository.deleteById(companyId);
+            return optional.get();
+        }
+        return null;
     }
 }

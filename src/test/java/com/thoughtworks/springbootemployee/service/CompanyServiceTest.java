@@ -6,14 +6,13 @@ import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class CompanyServiceTest {
@@ -23,7 +22,7 @@ public class CompanyServiceTest {
     @BeforeEach
     private void init() {
         companyRepository = Mockito.mock(CompanyRepository.class);
-        when(companyRepository.getAll())
+        when(companyRepository.findAll())
                 .thenReturn(Arrays.asList(
                         new Company(1, 3,
                                 Arrays.asList(
@@ -39,9 +38,9 @@ public class CompanyServiceTest {
                                 ))
                         )
                 );
-        when(companyRepository.addCompany(any(Company.class))).thenReturn(new Company());
-        when(companyRepository.updateCompany(1,any(Company.class))).thenReturn(new Company(1,3,new ArrayList<>()));
-        when(companyRepository.deleteCompany(1)).thenReturn(new Company(1,3,new ArrayList<>()));
+        when(companyRepository.findById(1)).thenReturn(Optional.of(new Company(1, 3, Collections.singletonList(new Employee(4, "xiaoming-02", "male")))));
+        when(companyRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
+        when(companyRepository.save(any(Company.class))).thenReturn(new Company(1, 3, Collections.singletonList(new Employee(4, "xiaoming-02", "male"))));
         companyService = new CompanyService(companyRepository);
     }
 
@@ -83,9 +82,9 @@ public class CompanyServiceTest {
         Integer page = 1;
         Integer pageSize = 2;
         //when
-        List<Company> companiesByPage = companyService.getCompaniesByPage(page, pageSize);
+        Page<Company> companiesByPage = companyService.getCompaniesByPage(page, pageSize);
         //then
-        assertEquals(pageSize, companiesByPage.size());
+        assertNotNull(companiesByPage);
 
     }
 
