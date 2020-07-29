@@ -1,73 +1,58 @@
 package com.thoughtworks.springbootemployee.controller;
+
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.service.CompanyService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/companies")
+
 public class CompanyController {
-    List<Company> companies = new ArrayList<>();
-    List<Employee> employees = new ArrayList<>();
+
+    private final CompanyService companyService;
+
+    public CompanyController(CompanyService companyService) {
+        this.companyService = companyService;
+    }
+
+    @GetMapping(params = {"page", "pageSize"})
+    public Page<Company> getCompanyInformationByPage(@RequestParam(name = "page", required = false) Integer page, @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+        return companyService.getCompaniesByPage(page , pageSize);
+    }
 
     @GetMapping
-    public List<Company> getCompanyInformation(@RequestParam(name = "page", required = false) Integer page, @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-        if (page == null)
-            return companies;
-        int pageStart = (page - 1) * pageSize;
-        int pageEnd = pageStart + pageSize;
-        return companies.subList(pageStart, pageEnd);
+    public List<Company> getCompanyInformation() {
+        return companyService.getAllCompanies();
     }
 
     @GetMapping("/{id}")
     public Company getCertainCompany(@PathVariable Integer id) {
-        for (Company singleCompany : companies) {
-            if (singleCompany.getCompanyID() == id) {
-                return singleCompany;
-            }
-        }
-        return new Company();
+        return companyService.getCertainCompany(id);
     }
 
     @GetMapping(path = "/{id}/employees")
     public List<Employee> getEmployeesInCompany(@PathVariable int id) {
-        for (Company company : companies) {
-            if (company.getCompanyID() == id) {
-                return company.getEmployees();
-            }
-        }
-        return null;
+        return companyService.getEmployeesInCompany(id);
     }
 
     @PostMapping
     public Company addCompany(@RequestBody Company company) {
-        companies.add(company);
-        return company;
+        return companyService.addNewCompany(company);
     }
 
     @PutMapping("/{id}")
     public Company updateCompanyInformation(@PathVariable Integer id,@RequestBody Company company) {
-        for (int index = 0; index < companies.size(); index++) {
-            if (companies.get(index).getCompanyID() == id){
-                companies.set(index, company);
-                break;
-            }
-        }
-        return company;
+        return companyService.updateCompany(id, company);
     }
 
     //todo
     @DeleteMapping("/{id}")
-    public String deleteEmployees(@PathVariable Integer id) {
-        for (Company company : companies) {
-            if (company.getCompanyID() == id) {
-                company.setEmployeesNumber(0);
-                company.setEmployees(new ArrayList<>());
-            }
-        }
-        return "delete success";
+    public Company deleteEmployees(@PathVariable Integer id) {
+        return companyService.deleteCompany(id);
     }
 
 }

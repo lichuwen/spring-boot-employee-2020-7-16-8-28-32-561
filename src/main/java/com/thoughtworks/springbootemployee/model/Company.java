@@ -1,5 +1,7 @@
 package com.thoughtworks.springbootemployee.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -10,6 +12,7 @@ public class Company {
     private Integer companyID;
     private Integer employeesNumber;
     @OneToMany
+    @JsonIgnore
     List<Employee> employees;
 
     public Company() {

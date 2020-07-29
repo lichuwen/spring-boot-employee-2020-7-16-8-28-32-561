@@ -39,7 +39,7 @@ public class CompanyService {
     }
 
     public Page<Company> getCompaniesByPage(Integer page, Integer pageSize) {
-        return companyRepository.findAll(PageRequest.of(page, pageSize));
+        return companyRepository.findAll(PageRequest.of(page-1, pageSize));
     }
 
 
