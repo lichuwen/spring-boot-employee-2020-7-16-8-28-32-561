@@ -35,6 +35,7 @@ public class EmployeeServiceTest {
                 );
         when(employeeRepository.addEmployee(any(Employee.class))).thenReturn(new Employee());
         when(employeeRepository.updateEmployee(anyInt(),any(Employee.class))).thenReturn(new Employee(1,"henry","male"));
+        when(employeeRepository.deleteEmployee(anyInt())).thenReturn(new Employee(1,"henry","male"));
         this.employeeService = new EmployeeService(employeeRepository);
     }
 
@@ -101,6 +102,19 @@ public class EmployeeServiceTest {
         Employee updatedEmployee = employeeService.updateEmployee(employeeId,employee);
         //then
         assertEquals(employeeId,updatedEmployee.getEmployeeId());
+    }
+
+    @Test
+    void should_delete_employee_when_delete_employee_given_employee_id(){
+        //given
+        Integer employeeId = 1;
+
+        //when
+        Employee employee = employeeService.deleteEmployee(employeeId);
+
+        //then
+        assertEquals(employeeId,employee.getEmployeeId());
+
     }
 
 }

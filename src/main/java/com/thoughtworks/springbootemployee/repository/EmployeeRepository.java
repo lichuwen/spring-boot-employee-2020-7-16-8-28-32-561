@@ -17,4 +17,8 @@ public class EmployeeRepository {
     public Employee updateEmployee(Integer employeeId, Employee employee) {
         return null;
     }
+
+    public Employee deleteEmployee(Integer employeeId) {
+        return null;
+    }
 }
