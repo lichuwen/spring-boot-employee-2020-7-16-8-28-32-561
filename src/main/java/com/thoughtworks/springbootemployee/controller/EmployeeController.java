@@ -1,6 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
-import com.thoughtworks.springbootemployee.data.EmployeeData;
+import com.thoughtworks.springbootemployee.reposity.EmployeeData;
 import com.thoughtworks.springbootemployee.model.Employee;
 import org.springframework.web.bind.annotation.*;
 
