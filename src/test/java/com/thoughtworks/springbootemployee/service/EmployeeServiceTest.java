@@ -1,16 +1,16 @@
 package com.thoughtworks.springbootemployee.service;
 
-import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,19 +23,15 @@ public class EmployeeServiceTest {
     @BeforeEach
     public void init() {
         EmployeeRepository employeeRepository = Mockito.mock(EmployeeRepository.class);
-        when(employeeRepository.getAllEmployees())
-                .thenReturn(Arrays.asList(
-                        new Employee(1, "xiaoming", "male"),
-                        new Employee(2, "jeany", "female"),
-                        new Employee(3, "woody", "male"),
-                        new Employee(4, "xiaoming-02", "male"),
-                        new Employee(5, "jeany-02", "female"),
-                        new Employee(6, "woody-02", "male")
-                        )
-                );
-        when(employeeRepository.addEmployee(any(Employee.class))).thenReturn(new Employee());
-        when(employeeRepository.updateEmployee(anyInt(),any(Employee.class))).thenReturn(new Employee(1,"henry","male"));
-        when(employeeRepository.deleteEmployee(anyInt())).thenReturn(new Employee(1,"henry","male"));
+        when(employeeRepository.findById(anyInt())).thenReturn(Optional.of(new Employee(1, "xiaoming", "male")));
+        when(employeeRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
+        when(employeeRepository.findAll()).thenReturn(Arrays.asList(
+                new Employee(1, "xiaoming", "male"),
+                new Employee(4, "xiaoming-02", "male")));
+        when(employeeRepository.findByGender("male")).thenReturn(Arrays.asList(
+                new Employee(1, "xiaoming", "male"),
+                new Employee(4, "xiaoming-02", "male")));
+        when(employeeRepository.save(any(Employee.class))).thenReturn(new Employee(1,"xiaoming","male"));
         this.employeeService = new EmployeeService(employeeRepository);
     }
 
@@ -65,15 +61,15 @@ public class EmployeeServiceTest {
         Integer page = 1;
         Integer pageSize = 2;
         //when
-        List<Employee> employeeByPage = employeeService.getEmployeesByPage(page, pageSize);
+        Page<Employee> employeesByPage = employeeService.getEmployeesByPage(page, pageSize);
         //then
-        assertEquals(pageSize, employeeByPage.size());
+        assertNotNull(employeesByPage);
     }
 
     @Test
     void should_return_female_employees_when_get_employees_by_gender_given_gender(){
         //given
-        String gender =  "female";
+        String gender =  "male";
         //when
         List<Employee> employeesByGender = employeeService.getEmployeesByGender(gender);
         //then
