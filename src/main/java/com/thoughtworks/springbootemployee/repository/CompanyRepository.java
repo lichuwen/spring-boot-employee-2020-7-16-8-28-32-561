@@ -15,6 +15,10 @@ public class CompanyRepository {
 
 
     public Company updateCompany(Integer companyId, Company company) {
-        return new Company(companyId,company.getEmployeesNumber(),company.getEmployees());
+        return company;
+    }
+
+    public Company deleteCompany(Integer companyId) {
+        return null;
     }
 }

@@ -13,8 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 public class companyServiceTest {
@@ -41,7 +40,8 @@ public class companyServiceTest {
                         )
                 );
         when(companyRepository.addCompany(any(Company.class))).thenReturn(new Company());
-        when(companyRepository.updateCompany(anyInt(),any(Company.class))).thenReturn(new Company(1,3,new ArrayList<>()));
+        when(companyRepository.updateCompany(1,any(Company.class))).thenReturn(new Company(1,3,new ArrayList<>()));
+        when(companyRepository.deleteCompany(1)).thenReturn(new Company(1,3,new ArrayList<>()));
         companyService = new CompanyService(companyRepository);
     }
 
@@ -111,4 +111,18 @@ public class companyServiceTest {
         //then
         assertEquals(companyId,updatedCompany.getCompanyID());
     }
+
+    @Test
+    void should_delete_company_and_employee_when_delete_company_given_company_id(){
+        //given
+        Integer companyId = 1;
+
+        //when
+        Company company = companyService.deleteCompany(companyId);
+
+        //then
+        assertEquals(companyId,company.getCompanyID());
+
+    }
+
 }
