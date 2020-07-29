@@ -8,9 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class EmployeeServiceTest {
@@ -29,8 +31,10 @@ public class EmployeeServiceTest {
                         new Employee(6, "woody-02", "male")
                         )
                 );
+        when(employeeRepository.addEmployee(any(Employee.class))).thenReturn(new Employee());
         this.employeeService = new EmployeeService(employeeRepository);
     }
+
 
     @Test
     void should_return_employee_list_when_get_all_employees() {
@@ -73,6 +77,16 @@ public class EmployeeServiceTest {
         assertEquals(gender,employeesByGender.get(0).getGender());
     }
 
+    @Test
+    void should_add_a_employee_when_add_new_employee_given_employee() {
+        //given
+        Employee employee = new Employee(7, "henry", "male");
 
+        //when
+        Employee newEmployee = employeeService.addNewEmployee(employee);
+
+        //then
+        assertNotNull(newEmployee);
+    }
 
 }

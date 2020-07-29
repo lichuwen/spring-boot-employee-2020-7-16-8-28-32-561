@@ -9,4 +9,8 @@ public class EmployeeRepository {
     public List<Employee> getAllEmployees() {
         return new ArrayList<>();
     }
+
+    public Employee addEmployee(Employee employee) {
+        return null;
+    }
 }
