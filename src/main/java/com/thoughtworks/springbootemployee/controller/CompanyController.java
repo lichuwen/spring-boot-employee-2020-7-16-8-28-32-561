@@ -21,7 +21,7 @@ public class CompanyController {
 
     @GetMapping(params = {"page", "pageSize"})
     public Page<Company> getCompanyInformationByPage(@RequestParam(name = "page", required = false) Integer page, @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-        return companyService.getCompaniesByPage(page , pageSize);
+        return companyService.getCompaniesByPage(page, pageSize);
     }
 
     @GetMapping
@@ -45,14 +45,13 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public Company updateCompanyInformation(@PathVariable Integer id,@RequestBody Company company) {
+    public Company updateCompanyInformation(@PathVariable Integer id, @RequestBody Company company) {
         return companyService.updateCompany(id, company);
     }
 
-    //todo
     @DeleteMapping("/{id}")
-    public Company deleteEmployees(@PathVariable Integer id) {
-        return companyService.deleteCompany(id);
+    public String deleteEmployees(@PathVariable Integer id) {
+        return companyService.deleteCompany(id) ? "success" : "FAIL";
     }
 
 }
