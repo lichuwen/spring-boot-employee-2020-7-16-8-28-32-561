@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.Enum.ResultEnum;
 import com.thoughtworks.springbootemployee.exception.GloableException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -122,6 +123,14 @@ public class CompanyServiceTest {
         //then
         assertEquals(companyId, updatedCompany.getCompanyID());
     }
+
+    @Test
+    void should_throw_gloable_exception_when_update_company_given_company_id_which_not_exist() {
+        Integer notExistCompanyId = 2;
+        GloableException gloableException = assertThrows(GloableException.class, () -> companyService.updateCompany(2, new Company()));
+        assertEquals(ResultEnum.DATA_NOT_FOUND.getMsg(), gloableException.getMsg());
+    }
+
 
     @Test
     void should_delete_company_and_employee_when_delete_company_given_company_id() throws GloableException {
