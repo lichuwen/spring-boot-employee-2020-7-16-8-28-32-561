@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.exception.GloableException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,11 +46,11 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void should_return_certain_employee_when_get_certain_employee_given_employee_id() {
+    void should_return_certain_employee_when_get_certain_employee_given_employee_id() throws GloableException {
         //given
         Integer employeeId = 1;
         //when
-        Employee employee= employeeService.getCertainEmployee(employeeId);
+        Employee employee = employeeService.getCertainEmployee(employeeId);
         //then
         assertNotNull(employee);
         assertEquals(employeeId, employee.getEmployeeId());
@@ -90,26 +91,23 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void should_update_a_employee_when_update_employee_given_employee_and_employee_id() {
+    void should_update_a_employee_when_update_employee_given_employee_and_employee_id() throws GloableException {
         //given
         Integer employeeId = 1;
         Employee employee = new Employee(1, "henry", "male");
         //when
-        Employee updatedEmployee = employeeService.updateEmployee(employeeId,employee);
+        Employee updatedEmployee = employeeService.updateEmployee(employeeId, employee);
         //then
-        assertEquals(employeeId,updatedEmployee.getEmployeeId());
+        assertEquals(employeeId, updatedEmployee.getEmployeeId());
     }
 
     @Test
-    void should_delete_employee_when_delete_employee_given_employee_id(){
+    void should_delete_employee_when_delete_employee_given_employee_id() {
         //given
         Integer employeeId = 1;
 
         //when
-        Employee employee = employeeService.deleteEmployee(employeeId);
-
-        //then
-        assertEquals(employeeId,employee.getEmployeeId());
+        assertDoesNotThrow(() -> employeeService.deleteEmployee(employeeId));
 
     }
 

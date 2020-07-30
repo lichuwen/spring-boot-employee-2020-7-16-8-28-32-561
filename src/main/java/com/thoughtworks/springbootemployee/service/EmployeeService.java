@@ -1,6 +1,8 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.thoughtworks.springbootemployee.Enum.ResultEnum;
+import com.thoughtworks.springbootemployee.exception.GloableException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.BeanUtils;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
+
     public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
@@ -24,12 +27,17 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Employee getCertainEmployee(Integer employeeId) {
-        return employeeRepository.findById(employeeId).orElse(null);
+    public Employee getCertainEmployee(Integer employeeId) throws GloableException {
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
+        if (employee.isPresent()) {
+            return employee.get();
+        } else {
+            throw new GloableException(ResultEnum.DATA_NOT_FOUND.getMsg());
+        }
     }
 
     public Page<Employee> getEmployeesByPage(Integer page, Integer pageSize) {
-        return employeeRepository.findAll(PageRequest.of(page-1,pageSize));
+        return employeeRepository.findAll(PageRequest.of(page - 1, pageSize));
     }
 
     public List<Employee> getEmployeesByGender(String gender) {
@@ -40,20 +48,23 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public Employee updateEmployee(Integer employeeId, Employee employee) {
+    public Employee updateEmployee(Integer employeeId, Employee employee) throws GloableException {
         Optional<Employee> byId = employeeRepository.findById(employeeId);
-        if(byId.isPresent()){
+        if (byId.isPresent()) {
             Employee oldEmployee = byId.get();
-            BeanUtils.copyProperties(employee,oldEmployee);
+            BeanUtils.copyProperties(employee, oldEmployee);
             return employeeRepository.save(employee);
-        }else {
-            return null;
+        } else {
+            throw new GloableException(ResultEnum.DATA_NOT_FOUND.getMsg());
         }
     }
 
-    public Employee deleteEmployee(Integer employeeId) {
+    public void deleteEmployee(Integer employeeId) throws GloableException {
         Optional<Employee> employee = employeeRepository.findById(employeeId);
-        employee.ifPresent(employeeRepository::delete);
-        return employee.orElse(null);
+        if (employee.isPresent()) {
+            employeeRepository.deleteById(employeeId);
+        } else {
+            throw new GloableException(ResultEnum.DATA_NOT_FOUND.getMsg());
+        }
     }
 }
