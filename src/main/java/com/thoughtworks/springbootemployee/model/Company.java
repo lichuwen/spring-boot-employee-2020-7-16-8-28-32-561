@@ -5,22 +5,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.List;
 
+import static javax.persistence.FetchType.EAGER;
+
 @Entity
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer companyID;
     private Integer employeesNumber;
-    @OneToMany
-    @JsonIgnore
+    private String companyName;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = EAGER)
     List<Employee> employees;
 
     public Company() {
     }
 
-    public Company(int companyID, int employeesNumber, List<Employee> employees) {
+    public Company(Integer companyID, Integer employeesNumber, String companyName, List<Employee> employees) {
         this.companyID = companyID;
-        this.employeesNumber = employees.size();
+        this.employeesNumber = employeesNumber;
+        this.companyName = companyName;
         this.employees = employees;
     }
 
@@ -42,5 +46,21 @@ public class Company {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    public void setCompanyID(Integer companyID) {
+        this.companyID = companyID;
+    }
+
+    public void setEmployeesNumber(Integer employeesNumber) {
+        this.employeesNumber = employeesNumber;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 }
