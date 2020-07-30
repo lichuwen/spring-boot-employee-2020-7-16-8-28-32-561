@@ -24,7 +24,7 @@ public class EmployeeServiceTest {
     @BeforeEach
     public void init() {
         EmployeeRepository employeeRepository = Mockito.mock(EmployeeRepository.class);
-        when(employeeRepository.findById(anyInt())).thenReturn(Optional.of(new Employee(1, "xiaoming", "male")));
+        when(employeeRepository.findById(1)).thenReturn(Optional.of(new Employee(1, "xiaoming", "male")));
         when(employeeRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
         when(employeeRepository.findAll()).thenReturn(Arrays.asList(
                 new Employee(1, "xiaoming", "male"),
@@ -54,6 +54,15 @@ public class EmployeeServiceTest {
         //then
         assertNotNull(employee);
         assertEquals(employeeId, employee.getEmployeeId());
+    }
+
+    @Test
+    void should_throw_exception_when_get_certain_employee_given_an_not_exist_employee_id() {
+        //given
+        Integer notExistEmployeeId = 2;
+        //when then
+        assertThrows(GloableException.class, () -> employeeService.getCertainEmployee(notExistEmployeeId));
+
     }
 
     @Test
