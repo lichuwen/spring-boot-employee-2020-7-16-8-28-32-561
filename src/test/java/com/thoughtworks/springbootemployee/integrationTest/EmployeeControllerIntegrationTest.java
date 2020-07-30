@@ -96,4 +96,16 @@ public class EmployeeControllerIntegrationTest {
                 .andExpect(jsonPath("$.content[1].name").value("Jeany"));
     }
 
+
+    @Test
+    void should_return_employee_when_hit_get_employee_endpoint_given_employee_id() throws Exception {
+        //given
+        employeeRepository.save(employeeList.get(0));
+        Integer id = 1;
+
+        mockMvc.perform(get("/employees/" + id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.employeeId").value(id));
+    }
+
 }
