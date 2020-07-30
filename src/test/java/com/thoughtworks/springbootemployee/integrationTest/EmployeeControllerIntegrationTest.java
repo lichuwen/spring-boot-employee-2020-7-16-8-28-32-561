@@ -25,7 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class EmployeeControllerIntegrationTest {
 
-    private final List<Employee> employeeList = Arrays.asList(new Employee(1, "Karen", "female"), new Employee(2, "Henry", "male"));
+    private final List<Employee> employeeList = Arrays.asList(new Employee(1, "Karen", "female"),
+            new Employee(2, "Jeany", "female"),
+            new Employee(3, "Henry", "male"),
+            new Employee(4, "Woody", "male")
+    );
     @Autowired
     EmployeeRepository employeeRepository;
     @Autowired
@@ -41,8 +45,8 @@ public class EmployeeControllerIntegrationTest {
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].name").value("Karen"))
                 .andExpect(jsonPath("$[0].gender").value("female"))
-                .andExpect(jsonPath("$[1].name").value("Henry"))
-                .andExpect(jsonPath("$[1].gender").value("male"));
+                .andExpect(jsonPath("$[1].name").value("Jeany"))
+                .andExpect(jsonPath("$[1].gender").value("female"));
     }
 
     @Test
@@ -59,6 +63,21 @@ public class EmployeeControllerIntegrationTest {
         assertEquals(1, all.size());
         assertEquals("lcw", all.get(0).getName());
         assertEquals("male", all.get(0).getGender());
+    }
+
+    @Test
+    void should_get_employees_list_when_hit_get_employee_endpoint_given_gender() throws Exception {
+        employeeRepository.save(employeeList.get(0));
+        employeeRepository.save(employeeList.get(1));
+        employeeRepository.save(employeeList.get(2));
+        employeeRepository.save(employeeList.get(3));
+        String gender = "male";
+        mockMvc.perform(get("/employees").param("gender", gender))
+//        mockMvc.perform(get("/employees?gender=" + gender))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].name").value("Henry"))
+                .andExpect(jsonPath("$[1].name").value("Woody"));
     }
 
 
