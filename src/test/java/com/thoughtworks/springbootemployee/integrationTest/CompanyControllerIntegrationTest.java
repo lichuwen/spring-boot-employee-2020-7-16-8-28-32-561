@@ -56,7 +56,11 @@ public class CompanyControllerIntegrationTest {
                 .andExpect(jsonPath("$.content[0].companyID").value(company1.getCompanyID()))
                 .andExpect(jsonPath("$.content[0].employeesNumber").value(company1.getEmployeesNumber()))
                 .andExpect(jsonPath("$.content[0].companyName").value(company1.getCompanyName()))
-                .andExpect(jsonPath("$.content[0].employees.length()").value(company1.getEmployees().size()));
+                .andExpect(jsonPath("$.content[0].employees.length()").value(company1.getEmployees().size()))
+                .andExpect(jsonPath("$.content[1].companyID").value(company2.getCompanyID()))
+                .andExpect(jsonPath("$.content[1].employeesNumber").value(company2.getEmployeesNumber()))
+                .andExpect(jsonPath("$.content[1].companyName").value(company2.getCompanyName()))
+                .andExpect(jsonPath("$.content[1].employees.length()").value(company2.getEmployees().size()));
     }
 
 
