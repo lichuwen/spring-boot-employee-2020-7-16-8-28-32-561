@@ -1,6 +1,8 @@
 package com.thoughtworks.springbootemployee.service;
 
 
+import com.thoughtworks.springbootemployee.Enum.ResultEnum;
+import com.thoughtworks.springbootemployee.exception.GloableException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -26,16 +28,21 @@ public class CompanyService {
         return companyRepository.findAll();
     }
 
-    public Company getCertainCompany(Integer companyId) {
-        return companyRepository.findById(companyId).orElse(null);
+    public Company getCertainCompany(Integer companyId) throws GloableException {
+        Optional<Company> company = companyRepository.findById(companyId);
+        if (company.isPresent()) {
+            return company.get();
+        } else {
+            throw new GloableException(ResultEnum.DATA_NOT_FOUND.getMsg());
+        }
     }
 
-    public List<Employee> getEmployeesInCompany(Integer companyId) {
+    public List<Employee> getEmployeesInCompany(Integer companyId) throws GloableException {
         Optional<Company> byId = companyRepository.findById(companyId);
-        if(byId.isPresent()){
+        if (byId.isPresent()) {
             return byId.get().getEmployees();
-        }else {
-            return new ArrayList<>();
+        } else {
+            throw new GloableException(ResultEnum.DATA_NOT_FOUND.getMsg());
         }
     }
 
@@ -48,23 +55,23 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-    public Company updateCompany(Integer companyId, Company company) {
+    public Company updateCompany(Integer companyId, Company company) throws GloableException {
         Optional<Company> byId = companyRepository.findById(companyId);
-        if(byId.isPresent()){
+        if (byId.isPresent()) {
             Company oldCompany = byId.get();
             BeanUtils.copyProperties(company, oldCompany);
             return companyRepository.save(oldCompany);
-        }else {
-            return null;
+        } else {
+            throw new GloableException(ResultEnum.DATA_NOT_FOUND.getMsg());
         }
     }
 
-    public Boolean deleteCompany(Integer companyId) {
+    public Boolean deleteCompany(Integer companyId) throws GloableException {
         Optional<Company> optional = companyRepository.findById(companyId);
         if (optional.isPresent()) {
             companyRepository.deleteById(companyId);
             return true;
         }
-        return false;
+        throw new GloableException(ResultEnum.DATA_NOT_FOUND.getMsg());
     }
 }

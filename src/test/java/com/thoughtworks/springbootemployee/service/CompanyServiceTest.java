@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.exception.GloableException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -21,7 +22,7 @@ public class CompanyServiceTest {
     private CompanyRepository companyRepository;
     private CompanyService companyService;
 
-    @BeforeAll
+    @BeforeEach
     private void init() {
         companyRepository = Mockito.mock(CompanyRepository.class);
         when(companyRepository.findAll())
@@ -59,7 +60,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_return_certain_company_when_get_certain_company_given_company_id() {
+    void should_return_certain_company_when_get_certain_company_given_company_id() throws GloableException {
         //given
         Integer companyId = 1;
         //when
@@ -72,7 +73,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_return_employees_when_get_employees_in_company_given_company_id() {
+    void should_return_employees_when_get_employees_in_company_given_company_id() throws GloableException {
         //given
         Integer companyId = 1;
         //when
@@ -111,7 +112,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_update_a_company_when_update_company_given_company_and_company_id() {
+    void should_update_a_company_when_update_company_given_company_and_company_id() throws GloableException {
         //given
         Integer companyId = 1;
         Company company = new Company(1, 1000, "OOCL", new ArrayList<>());
@@ -123,7 +124,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_delete_company_and_employee_when_delete_company_given_company_id() {
+    void should_delete_company_and_employee_when_delete_company_given_company_id() throws GloableException {
         //given
         Integer companyId = 1;
 
@@ -132,7 +133,9 @@ public class CompanyServiceTest {
         verify(companyRepository).deleteById(1);
         //then
         assertTrue(result);
-
     }
+
+
+
 
 }

@@ -8,4 +8,8 @@ public enum ResultEnum {
     ResultEnum(String msg) {
         this.msg = msg;
     }
+
+    public String getMsg() {
+        return this.msg;
+    }
 }
