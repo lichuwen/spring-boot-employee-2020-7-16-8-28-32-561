@@ -1,10 +1,10 @@
 package com.thoughtworks.springbootemployee.exception;
 
-public class gloableException extends Exception {
+public class GloableException extends Exception {
     String msg;
 
-    public gloableException(String message, String msg) {
-        super(message);
+    public GloableException(String msg) {
+        super(msg);
         this.msg = msg;
     }
 
