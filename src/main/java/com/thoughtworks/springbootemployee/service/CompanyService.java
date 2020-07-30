@@ -4,6 +4,7 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -50,26 +51,20 @@ public class CompanyService {
     public Company updateCompany(Integer companyId, Company company) {
         Optional<Company> byId = companyRepository.findById(companyId);
         if(byId.isPresent()){
-            //
             Company oldCompany = byId.get();
-            if(company.getEmployeesNumber()!=null){
-                oldCompany.setEmployeesNumber(company.getEmployeesNumber());
-            }
-            if(company.getEmployees()!=null){
-                oldCompany.setEmployees(company.getEmployees());
-            }
+            BeanUtils.copyProperties(company, oldCompany);
             return companyRepository.save(oldCompany);
         }else {
             return null;
         }
     }
 
-    public Company deleteCompany(Integer companyId) {
+    public Boolean deleteCompany(Integer companyId) {
         Optional<Company> optional = companyRepository.findById(companyId);
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             companyRepository.deleteById(companyId);
-            return optional.get();
+            return true;
         }
-        return null;
+        return false;
     }
 }
