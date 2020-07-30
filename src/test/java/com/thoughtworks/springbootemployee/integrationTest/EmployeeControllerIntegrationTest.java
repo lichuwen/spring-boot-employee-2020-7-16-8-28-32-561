@@ -73,12 +73,27 @@ public class EmployeeControllerIntegrationTest {
         employeeRepository.save(employeeList.get(3));
         String gender = "male";
         mockMvc.perform(get("/employees").param("gender", gender))
-//        mockMvc.perform(get("/employees?gender=" + gender))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].name").value("Henry"))
                 .andExpect(jsonPath("$[1].name").value("Woody"));
     }
 
+    @Test
+    void should_return_employees_list_when_hit_get_employee_endpoint_given_page_and_page_size() throws Exception {
+        //given
+        employeeRepository.save(employeeList.get(0));
+        employeeRepository.save(employeeList.get(1));
+        employeeRepository.save(employeeList.get(2));
+        employeeRepository.save(employeeList.get(3));
+        int page = 1;
+        int pageSize = 3;
+
+        mockMvc.perform(get("/employees?page=" + page + "&pageSize=" + pageSize))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(3))
+                .andExpect(jsonPath("$.content[0].name").value("Karen"))
+                .andExpect(jsonPath("$.content[1].name").value("Jeany"));
+    }
 
 }
