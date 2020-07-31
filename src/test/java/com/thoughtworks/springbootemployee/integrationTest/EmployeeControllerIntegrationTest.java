@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.integrationTest;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,6 +38,14 @@ public class EmployeeControllerIntegrationTest {
     @Autowired
     MockMvc mockMvc;
 
+    @BeforeEach
+    void init() {
+        employeeRepository.save(employeeList.get(0));
+        employeeRepository.save(employeeList.get(1));
+        employeeRepository.save(employeeList.get(2));
+        employeeRepository.save(employeeList.get(3));
+    }
+
     @AfterEach
     void tearDown() {
         employeeRepository.deleteAll();
@@ -45,14 +54,10 @@ public class EmployeeControllerIntegrationTest {
 
     @Test
     void should_get_employees_list_when_hit_get_employee_endpoint_given_nothing() throws Exception {
-        //given
-        employeeRepository.save(employeeList.get(0));
-        employeeRepository.save(employeeList.get(1));
-
         //when
         mockMvc.perform(get("/employees"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$.length()").value(4))
                 .andExpect(jsonPath("$[0].name").value("Karen"))
                 .andExpect(jsonPath("$[0].gender").value("female"))
                 .andExpect(jsonPath("$[1].name").value("Jeany"))
@@ -63,7 +68,6 @@ public class EmployeeControllerIntegrationTest {
     void should_add_employee_when_hit_post_employee_endpoint_given_employee() throws Exception {
         //given
         String employeeInfo = "{\n" +
-                "            \"employeeId\": 1,\n" +
                 "            \"name\": \"lcw\",\n" +
                 "            \"gender\": \"male\"\n" +
                 "        },";
@@ -73,19 +77,15 @@ public class EmployeeControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("lcw"))
                 .andExpect(jsonPath("$.gender").value("male"));
-        List<Employee> all = employeeRepository.findAll();
-        assertEquals(1, all.size());
-        assertEquals("lcw", all.get(0).getName());
-        assertEquals("male", all.get(0).getGender());
+        List<Employee> employees = employeeRepository.findAll();
+        assertEquals(5, employees.size());
+        assertEquals("lcw", employees.get(4).getName());
+        assertEquals("male", employees.get(4).getGender());
     }
 
     @Test
     void should_get_employees_list_when_hit_get_employee_endpoint_given_gender() throws Exception {
         //given
-        employeeRepository.save(employeeList.get(0));
-        employeeRepository.save(employeeList.get(1));
-        employeeRepository.save(employeeList.get(2));
-        employeeRepository.save(employeeList.get(3));
         String gender = "male";
 
         //when
@@ -99,10 +99,6 @@ public class EmployeeControllerIntegrationTest {
     @Test
     void should_return_employees_list_when_hit_get_employee_endpoint_given_page_and_page_size() throws Exception {
         //given
-        employeeRepository.save(employeeList.get(0));
-        employeeRepository.save(employeeList.get(1));
-        employeeRepository.save(employeeList.get(2));
-        employeeRepository.save(employeeList.get(3));
         int page = 1;
         int pageSize = 3;
 
@@ -118,43 +114,40 @@ public class EmployeeControllerIntegrationTest {
     @Test
     void should_return_employee_when_hit_get_employee_endpoint_given_employee_id() throws Exception {
         //given
-        employeeRepository.save(employeeList.get(0));
-        Integer id = 1;
+        Employee employee = employeeRepository.save(employeeList.get(0));
 
         //when
-        mockMvc.perform(get("/employees/" + id))
+        mockMvc.perform(get("/employees/" + employee.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.employeeId").value(id));
+                .andExpect(jsonPath("$.id").value(employee.getId()));
     }
 
     @Test
     void should_return_employee_when_hit_update_employee_endpoint_given_employee_id_and_employee() throws Exception {
         //given
-        Integer id = 1;
-        employeeRepository.save(employeeList.get(0));
+        Employee employee = employeeRepository.save(employeeList.get(0));
         String employeeInfo = "{\n" +
-                "            \"employeeId\": 1,\n" +
+                "            \"id\": " + employee.getId() + ",\n" +
                 "            \"name\": \"lcw\",\n" +
                 "            \"gender\": \"male\"\n" +
                 "        },";
 
         //when
-        mockMvc.perform(put("/employees/" + id).contentType(MediaType.APPLICATION_JSON).content(employeeInfo))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.employeeId").value("1"))
+        mockMvc.perform(put("/employees/" + employee.getId()).contentType(MediaType.APPLICATION_JSON).content(employeeInfo))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(employee.getId()))
                 .andExpect(jsonPath("$.name").value("lcw"))
                 .andExpect(jsonPath("$.gender").value("male"));
     }
 
     @Test
-    void should_return_202_status_when_hit_delete_endpoint_given_employee_id() throws Exception {
+    void should_return_null_when_hit_delete_endpoint_given_employee_id() throws Exception {
         //given
-        Integer id = 1;
-        employeeRepository.save(employeeList.get(0));
+        Employee employee = employeeRepository.save(employeeList.get(0));
 
         //when
-        mockMvc.perform(delete("/employees/" + id))
-                .andExpect(status().isAccepted());
+        mockMvc.perform(delete("/employees/" + employee.getId()))
+                .andExpect(status().isOk());
 
     }
 

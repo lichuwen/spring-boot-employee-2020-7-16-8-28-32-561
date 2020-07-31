@@ -53,7 +53,7 @@ public class EmployeeServiceTest {
         Employee employee = employeeService.getCertainEmployee(employeeId);
         //then
         assertNotNull(employee);
-        assertEquals(employeeId, employee.getEmployeeId());
+        assertEquals(employeeId, employee.getId());
     }
 
     @Test
@@ -107,7 +107,7 @@ public class EmployeeServiceTest {
         //when
         Employee updatedEmployee = employeeService.updateEmployee(employeeId, employee);
         //then
-        assertEquals(employeeId, updatedEmployee.getEmployeeId());
+        assertEquals(employeeId, updatedEmployee.getId());
     }
 
     @Test
