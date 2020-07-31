@@ -5,6 +5,7 @@ import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,19 +43,21 @@ public class EmployeeController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Employee addEmployee(@RequestBody Employee employee) {
         return employeeService.addNewEmployee(employee);
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
     public Employee updateEmployeeInformation(@PathVariable Integer id, @RequestBody Employee employee) throws GloableException {
         return employeeService.updateEmployee(id, employee);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public String deleteEmployee(@PathVariable Integer id) throws GloableException {
         employeeService.deleteEmployee(id);
         return "成功";
-
     }
 }

@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.integrationTest;
 
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,8 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,21 +25,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class EmployeeControllerIntegrationTest {
 
-    private final List<Employee> employeeList = Arrays.asList(new Employee(1, "Karen", "female"),
+    private final List<Employee> employeeList = Arrays.asList(
+            new Employee(1, "Karen", "female"),
             new Employee(2, "Jeany", "female"),
             new Employee(3, "Henry", "male"),
             new Employee(4, "Woody", "male")
     );
+
     @Autowired
     EmployeeRepository employeeRepository;
     @Autowired
     MockMvc mockMvc;
 
+    @AfterEach
+    void tearDown() {
+        employeeRepository.deleteAll();
+    }
+
 
     @Test
     void should_get_employees_list_when_hit_get_employee_endpoint_given_nothing() throws Exception {
+        //given
         employeeRepository.save(employeeList.get(0));
         employeeRepository.save(employeeList.get(1));
+
+        //when
         mockMvc.perform(get("/employees"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
@@ -51,12 +61,16 @@ public class EmployeeControllerIntegrationTest {
 
     @Test
     void should_add_employee_when_hit_post_employee_endpoint_given_employee() throws Exception {
+        //given
         String employeeInfo = "{\n" +
                 "            \"employeeId\": 1,\n" +
                 "            \"name\": \"lcw\",\n" +
                 "            \"gender\": \"male\"\n" +
                 "        },";
+
+        //when
         mockMvc.perform(post("/employees").contentType(MediaType.APPLICATION_JSON).content(employeeInfo))
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("lcw"))
                 .andExpect(jsonPath("$.gender").value("male"));
         List<Employee> all = employeeRepository.findAll();
@@ -67,11 +81,14 @@ public class EmployeeControllerIntegrationTest {
 
     @Test
     void should_get_employees_list_when_hit_get_employee_endpoint_given_gender() throws Exception {
+        //given
         employeeRepository.save(employeeList.get(0));
         employeeRepository.save(employeeList.get(1));
         employeeRepository.save(employeeList.get(2));
         employeeRepository.save(employeeList.get(3));
         String gender = "male";
+
+        //when
         mockMvc.perform(get("/employees").param("gender", gender))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
@@ -89,6 +106,7 @@ public class EmployeeControllerIntegrationTest {
         int page = 1;
         int pageSize = 3;
 
+        //when
         mockMvc.perform(get("/employees?page=" + page + "&pageSize=" + pageSize))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(3))
@@ -103,9 +121,41 @@ public class EmployeeControllerIntegrationTest {
         employeeRepository.save(employeeList.get(0));
         Integer id = 1;
 
+        //when
         mockMvc.perform(get("/employees/" + id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.employeeId").value(id));
+    }
+
+    @Test
+    void should_return_employee_when_hit_update_employee_endpoint_given_employee_id_and_employee() throws Exception {
+        //given
+        Integer id = 1;
+        employeeRepository.save(employeeList.get(0));
+        String employeeInfo = "{\n" +
+                "            \"employeeId\": 1,\n" +
+                "            \"name\": \"lcw\",\n" +
+                "            \"gender\": \"male\"\n" +
+                "        },";
+
+        //when
+        mockMvc.perform(put("/employees/" + id).contentType(MediaType.APPLICATION_JSON).content(employeeInfo))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.employeeId").value("1"))
+                .andExpect(jsonPath("$.name").value("lcw"))
+                .andExpect(jsonPath("$.gender").value("male"));
+    }
+
+    @Test
+    void should_return_202_status_when_hit_delete_endpoint_given_employee_id() throws Exception {
+        //given
+        Integer id = 1;
+        employeeRepository.save(employeeList.get(0));
+
+        //when
+        mockMvc.perform(delete("/employees/" + id))
+                .andExpect(status().isAccepted());
+
     }
 
 }
