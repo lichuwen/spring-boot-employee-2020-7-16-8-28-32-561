@@ -6,8 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ResultEnum {
-    DATA_NOT_FOUND("数据不存在"),
-    ILLEGALE_OPERATION("非法操作");
+    DATA_NOT_FOUND("data not found"),
+    ILLEGALE_OPERATION("illegale operation");
     private final String msg;
 
     public String getMsg() {
