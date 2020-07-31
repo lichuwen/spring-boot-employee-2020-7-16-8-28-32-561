@@ -1,11 +1,10 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Enum.ResultEnum;
-import com.thoughtworks.springbootemployee.exception.GloableException;
+import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -61,7 +60,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_return_certain_company_when_get_certain_company_given_company_id() throws GloableException {
+    void should_return_certain_company_when_get_certain_company_given_company_id() throws GlobalException {
         //given
         Integer companyId = 1;
         //when
@@ -74,7 +73,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_return_employees_when_get_employees_in_company_given_company_id() throws GloableException {
+    void should_return_employees_when_get_employees_in_company_given_company_id() throws GlobalException {
         //given
         Integer companyId = 1;
         //when
@@ -113,7 +112,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_update_a_company_when_update_company_given_company_and_company_id() throws GloableException {
+    void should_update_a_company_when_update_company_given_company_and_company_id() throws GlobalException {
         //given
         Integer companyId = 1;
         Company company = new Company(1, 1000, "OOCL", new ArrayList<>());
@@ -127,13 +126,13 @@ public class CompanyServiceTest {
     @Test
     void should_throw_gloable_exception_when_update_company_given_company_id_which_not_exist() {
         Integer notExistCompanyId = 2;
-        GloableException gloableException = assertThrows(GloableException.class, () -> companyService.updateCompany(2, new Company()));
-        assertEquals(ResultEnum.DATA_NOT_FOUND.getMsg(), gloableException.getMsg());
+        GlobalException globalException = assertThrows(GlobalException.class, () -> companyService.updateCompany(2, new Company()));
+        assertEquals(ResultEnum.DATA_NOT_FOUND.getMsg(), globalException.getMsg());
     }
 
 
     @Test
-    void should_delete_company_and_employee_when_delete_company_given_company_id() throws GloableException {
+    void should_delete_company_and_employee_when_delete_company_given_company_id() throws GlobalException {
         //given
         Integer companyId = 1;
 

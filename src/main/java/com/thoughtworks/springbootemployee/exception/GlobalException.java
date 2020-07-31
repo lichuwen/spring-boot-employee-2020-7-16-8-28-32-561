@@ -1,9 +1,10 @@
 package com.thoughtworks.springbootemployee.exception;
 
-public class GloableException extends Exception {
+public class GlobalException extends Exception {
+    Integer code;
     String msg;
 
-    public GloableException(String msg) {
+    public GlobalException(String msg) {
         super(msg);
         this.msg = msg;
     }

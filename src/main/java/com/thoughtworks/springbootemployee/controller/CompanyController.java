@@ -1,6 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
-import com.thoughtworks.springbootemployee.exception.GloableException;
+import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.CompanyService;
@@ -31,12 +31,12 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public Company getCertainCompany(@PathVariable Integer id) throws GloableException {
+    public Company getCertainCompany(@PathVariable Integer id) throws GlobalException {
         return companyService.getCertainCompany(id);
     }
 
     @GetMapping(path = "/{id}/employees")
-    public List<Employee> getEmployeesInCompany(@PathVariable int id) throws GloableException {
+    public List<Employee> getEmployeesInCompany(@PathVariable int id) throws GlobalException {
         return companyService.getEmployeesInCompany(id);
     }
 
@@ -46,12 +46,12 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public Company updateCompanyInformation(@PathVariable Integer id, @RequestBody Company company) throws GloableException {
+    public Company updateCompanyInformation(@PathVariable Integer id, @RequestBody Company company) throws GlobalException {
         return companyService.updateCompany(id, company);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteEmployees(@PathVariable Integer id) throws GloableException {
+    public String deleteEmployees(@PathVariable Integer id) throws GlobalException {
         return companyService.deleteCompany(id) ? "success" : "FAIL";
     }
 

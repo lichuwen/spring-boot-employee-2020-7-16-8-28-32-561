@@ -1,6 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
-import com.thoughtworks.springbootemployee.exception.GloableException;
+import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +15,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 public class EmployeeServiceTest {
@@ -46,7 +45,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void should_return_certain_employee_when_get_certain_employee_given_employee_id() throws GloableException {
+    void should_return_certain_employee_when_get_certain_employee_given_employee_id() throws GlobalException {
         //given
         Integer employeeId = 1;
         //when
@@ -61,7 +60,7 @@ public class EmployeeServiceTest {
         //given
         Integer notExistEmployeeId = 2;
         //when then
-        assertThrows(GloableException.class, () -> employeeService.getCertainEmployee(notExistEmployeeId));
+        assertThrows(GlobalException.class, () -> employeeService.getCertainEmployee(notExistEmployeeId));
 
     }
 
@@ -100,7 +99,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void should_update_a_employee_when_update_employee_given_employee_and_employee_id() throws GloableException {
+    void should_update_a_employee_when_update_employee_given_employee_and_employee_id() throws GlobalException {
         //given
         Integer employeeId = 1;
         Employee employee = new Employee(1, "henry", "male");
