@@ -1,9 +1,8 @@
 package com.thoughtworks.springbootemployee.controller;
 
-import com.thoughtworks.springbootemployee.exception.GloableException;
+import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +37,7 @@ public class EmployeeController {
 
 
     @GetMapping("/{id}")
-    public Employee getCertainEmployee(@PathVariable Integer id) throws GloableException {
+    public Employee getCertainEmployee(@PathVariable Integer id) throws GlobalException {
         return employeeService.getCertainEmployee(id);
     }
 
@@ -49,12 +48,12 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployeeInformation(@PathVariable Integer id, @RequestBody Employee employee) throws GloableException {
+    public Employee updateEmployeeInformation(@PathVariable Integer id, @RequestBody Employee employee) throws GlobalException {
         return employeeService.updateEmployee(id, employee);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteEmployee(@PathVariable Integer id) throws GloableException {
+    public String deleteEmployee(@PathVariable Integer id) throws GlobalException {
         employeeService.deleteEmployee(id);
         return "success";
     }
