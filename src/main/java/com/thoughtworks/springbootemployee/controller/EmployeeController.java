@@ -49,15 +49,13 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
     public Employee updateEmployeeInformation(@PathVariable Integer id, @RequestBody Employee employee) throws GloableException {
         return employeeService.updateEmployee(id, employee);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public String deleteEmployee(@PathVariable Integer id) throws GloableException {
         employeeService.deleteEmployee(id);
-        return "成功";
+        return "success";
     }
 }
