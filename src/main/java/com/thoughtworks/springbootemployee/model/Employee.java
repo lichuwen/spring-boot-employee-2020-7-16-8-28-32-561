@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer employeeId;
+    private Integer id;
     //    @JoinColumn(name = "companyID")
 //    private Integer companyId;
     private String name;
