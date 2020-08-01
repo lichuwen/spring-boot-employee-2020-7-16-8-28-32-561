@@ -3,7 +3,6 @@ package com.thoughtworks.springbootemployee.integrationTest;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,20 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * @ProjectName: spring-boot-employee
- * @Package: com.thoughtworks.springbootemployee.integrationTest
- * @ClassName: CompanyControllerIntegrationTest
- * @Author: carrymaniac
- * @Description:
- * @Date: 2020/7/30 10:45 下午
- * @Version:
- */
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CompanyControllerIntegrationTest {
@@ -40,14 +30,14 @@ public class CompanyControllerIntegrationTest {
 
     private final List<Company> companyList = Arrays.asList(new Company(1, 3, "OOCL",
             Arrays.asList(
-                    new Employee(1, "xiaoming", "male"),
-                    new Employee(2, "jeany", "female"),
-                    new Employee(3, "woody", "male")
+                    new Employee(1, "woody", "male"),
+                    new Employee(2, "karen", "female"),
+                    new Employee(3, "jeany", "female")
             )), new Company(2, 3, "ThoughtWorks",
             Arrays.asList(
-                    new Employee(4, "xiaoming-02", "male"),
-                    new Employee(5, "jeany-02", "female"),
-                    new Employee(6, "woody-02", "male")
+                    new Employee(4, "woody-02", "male"),
+                    new Employee(5, "karen-02", "female"),
+                    new Employee(6, "jeany-02", "female")
             )));
 
     @Test
@@ -55,8 +45,8 @@ public class CompanyControllerIntegrationTest {
         Company company1 = companyRepository.save(companyList.get(0));
         Company company2 = companyRepository.save(companyList.get(1));
         mockMvc.perform(get("/companies")
-                .param("page","1")
-                .param("pageSize","2"))
+                .param("page", "1")
+                .param("pageSize", "2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(2))
                 .andExpect(jsonPath("$.content[0].companyID").value(company1.getCompanyID()))
@@ -90,7 +80,7 @@ public class CompanyControllerIntegrationTest {
     @Test
     void should_get_company_when_hit_get_company_given_id() throws Exception {
         Company company = companyRepository.save(companyList.get(0));
-        mockMvc.perform(get("/companies/"+company.getCompanyID()))
+        mockMvc.perform(get("/companies/" + company.getCompanyID()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.companyID").value(company.getCompanyID()))
                 .andExpect(jsonPath("$.employeesNumber").value(company.getEmployeesNumber()))
@@ -99,9 +89,9 @@ public class CompanyControllerIntegrationTest {
     }
 
     @Test
-    void should_get_employees_when_hit_get_company_given_id() throws Exception{
+    void should_get_employees_when_hit_get_company_given_id() throws Exception {
         Company company = companyRepository.save(companyList.get(0));
-        mockMvc.perform(get("/companies/"+company.getCompanyID()+"/employees"))
+        mockMvc.perform(get("/companies/" + company.getCompanyID() + "/employees"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(company.getEmployees().size()))
                 .andExpect(jsonPath("$[0].id").value(company.getEmployees().get(0).getId()))
@@ -118,17 +108,30 @@ public class CompanyControllerIntegrationTest {
         mockMvc.perform(post("/companies")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)
-                )
+        )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.companyID").value(1))
                 .andExpect(jsonPath("$.employeesNumber").value(2))
                 .andExpect(jsonPath("$.companyName").value("OOCL"))
                 .andExpect(jsonPath("$.employees.length()").value(2));
         List<Company> all = companyRepository.findAll();
-        assertEquals(1,all.size());
-        assertEquals("OOCL",all.get(0).getCompanyName());
-        assertEquals(1,all.get(0).getCompanyID());
-        assertEquals(2,all.get(0).getEmployeesNumber());
+        assertEquals(1, all.size());
+        assertEquals("OOCL", all.get(0).getCompanyName());
+        assertEquals(1, all.get(0).getCompanyID());
+        assertEquals(2, all.get(0).getEmployeesNumber());
+    }
+
+    @Test
+    void should_update_company_when_hit_put_company_endpoint_given_company() throws Exception {
+        Company company = companyRepository.save(companyList.get(0));
+        String requestBody = "{\"companyName\":\"OOCL-update\",\"companyID\":1,\"employeesNumber\":2,\"employees\":[{\"id\":1,\"name\":\"woody\",\"gender\":\"male\"},{\"id\":2,\"name\":\"karen\",\"gender\":\"female\"}]}";
+        mockMvc.perform(put("/companies/"+company.getCompanyID())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.companyName").value("OOCL-update"))
+                .andExpect(jsonPath("$.employeesNumber").value(2))
+                .andExpect(jsonPath("$.employees.length()").value(2));
 
     }
 }
