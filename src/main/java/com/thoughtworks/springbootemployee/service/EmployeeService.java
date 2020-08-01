@@ -66,12 +66,13 @@ public class EmployeeService {
         return mapper.toEmployeeDto(employeeRepository.save(employee));
     }
 
-    public Employee updateEmployee(Integer employeeId, Employee employee) throws GlobalException {
+    public EmployeeResponse updateEmployee(Integer employeeId, EmployeeRequest employeeRequest) throws GlobalException {
         Optional<Employee> byId = employeeRepository.findById(employeeId);
         if (byId.isPresent()) {
             Employee oldEmployee = byId.get();
-            BeanUtils.copyProperties(employee, oldEmployee);
-            return employeeRepository.save(employee);
+            BeanUtils.copyProperties(employeeRequest, oldEmployee);
+            Employee employee = mapper.toEmployee(employeeRequest);
+            return mapper.toEmployeeDto(employeeRepository.save(employee));
         } else {
             throw new GlobalException(ResultEnum.DATA_NOT_FOUND.getMsg());
         }

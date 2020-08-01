@@ -106,9 +106,9 @@ public class EmployeeServiceTest {
     void should_update_a_employee_when_update_employee_given_employee_and_employee_id() throws GlobalException {
         //given
         Integer employeeId = 1;
-        Employee employee = new Employee(1, "henry", "male");
+        EmployeeRequest employee = new EmployeeRequest(1, "henry", "male");
         //when
-        Employee updatedEmployee = employeeService.updateEmployee(employeeId, employee);
+        EmployeeResponse updatedEmployee = employeeService.updateEmployee(employeeId, employee);
         //then
         assertEquals(employeeId, updatedEmployee.getId());
     }

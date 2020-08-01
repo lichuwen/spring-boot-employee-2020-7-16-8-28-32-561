@@ -50,7 +50,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployeeInformation(@PathVariable Integer id, @RequestBody Employee employee) throws GlobalException {
+    public EmployeeResponse updateEmployeeInformation(@PathVariable Integer id, @RequestBody EmployeeRequest employee) throws GlobalException {
         return employeeService.updateEmployee(id, employee);
     }
 
