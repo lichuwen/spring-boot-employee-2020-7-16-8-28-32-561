@@ -13,9 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 public class CompanyRequest implements Serializable {
 
-    private Integer id;
-    private String companyName;
+    private Integer companyID;
     private Integer employeesNumber;
+    private String companyName;
     List<Employee> employees;
 
 }
