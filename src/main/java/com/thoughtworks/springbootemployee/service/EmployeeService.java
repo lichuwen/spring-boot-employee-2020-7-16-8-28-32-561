@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -54,8 +55,9 @@ public class EmployeeService {
         return new PageImpl<>(employeeResponses);
     }
 
-    public List<Employee> getEmployeesByGender(String gender) {
-        return employeeRepository.findByGender(gender);
+    public List<EmployeeResponse> getEmployeesByGender(String gender) {
+        List<Employee> employees = employeeRepository.findByGender(gender);
+        return employees.stream().map(employee -> mapper.toEmployeeDto(employee)).collect(Collectors.toList());
     }
 
     public Employee addNewEmployee(Employee employee) {

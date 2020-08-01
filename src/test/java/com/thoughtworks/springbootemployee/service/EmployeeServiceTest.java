@@ -83,7 +83,7 @@ public class EmployeeServiceTest {
         //given
         String gender =  "male";
         //when
-        List<Employee> employeesByGender = employeeService.getEmployeesByGender(gender);
+        List<EmployeeResponse> employeesByGender = employeeService.getEmployeesByGender(gender);
         //then
         assertTrue(employeesByGender.size()>0);
         assertEquals(gender,employeesByGender.get(0).getGender());
