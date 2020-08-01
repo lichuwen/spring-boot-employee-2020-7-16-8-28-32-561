@@ -3,7 +3,7 @@ package com.thoughtworks.springbootemployee.mapperTest;
 import com.thoughtworks.springbootemployee.dto.EmployeeRequest;
 import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.model.Employee;
-import mapper.EmployeeMapper;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;

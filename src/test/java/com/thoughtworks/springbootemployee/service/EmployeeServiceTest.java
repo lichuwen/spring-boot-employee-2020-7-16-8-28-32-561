@@ -1,6 +1,9 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.dto.EmployeeRequest;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,15 +34,16 @@ public class EmployeeServiceTest {
         when(employeeRepository.findByGender("male")).thenReturn(Arrays.asList(
                 new Employee(1, "xiaoming", "male"),
                 new Employee(4, "xiaoming-02", "male")));
-        when(employeeRepository.save(any(Employee.class))).thenReturn(new Employee(1,"xiaoming","male"));
-        this.employeeService = new EmployeeService(employeeRepository);
+        when(employeeRepository.save(any(Employee.class))).thenReturn(new Employee(1, "xiaoming", "male"));
+        EmployeeMapper employeeMapper = new EmployeeMapper();
+        this.employeeService = new EmployeeService(employeeRepository, employeeMapper);
     }
 
 
     @Test
     void should_return_employee_list_when_get_all_employees() {
         //when
-        List<Employee> employees = employeeService.getAllEmployees();
+        List<EmployeeResponse> employees = employeeService.getAllEmployees();
         //then
         assertTrue(employees.size() > 0);
     }
@@ -49,7 +53,7 @@ public class EmployeeServiceTest {
         //given
         Integer employeeId = 1;
         //when
-        Employee employee = employeeService.getCertainEmployee(employeeId);
+        EmployeeResponse employee = employeeService.getCertainEmployee(employeeId);
         //then
         assertNotNull(employee);
         assertEquals(employeeId, employee.getId());
@@ -70,7 +74,7 @@ public class EmployeeServiceTest {
         Integer page = 1;
         Integer pageSize = 2;
         //when
-        Page<Employee> employeesByPage = employeeService.getEmployeesByPage(page, pageSize);
+        Page<EmployeeResponse> employeesByPage = employeeService.getEmployeesByPage(page, pageSize);
         //then
         assertNotNull(employeesByPage);
     }
@@ -80,7 +84,7 @@ public class EmployeeServiceTest {
         //given
         String gender =  "male";
         //when
-        List<Employee> employeesByGender = employeeService.getEmployeesByGender(gender);
+        List<EmployeeResponse> employeesByGender = employeeService.getEmployeesByGender(gender);
         //then
         assertTrue(employeesByGender.size()>0);
         assertEquals(gender,employeesByGender.get(0).getGender());
@@ -89,10 +93,10 @@ public class EmployeeServiceTest {
     @Test
     void should_add_a_employee_when_add_new_employee_given_employee() {
         //given
-        Employee employee = new Employee(7, "henry", "male");
+        EmployeeRequest employee = new EmployeeRequest(7, "henry", "male");
 
         //when
-        Employee newEmployee = employeeService.addNewEmployee(employee);
+        EmployeeResponse newEmployee = employeeService.addNewEmployee(employee);
 
         //then
         assertNotNull(newEmployee);
@@ -102,9 +106,9 @@ public class EmployeeServiceTest {
     void should_update_a_employee_when_update_employee_given_employee_and_employee_id() throws GlobalException {
         //given
         Integer employeeId = 1;
-        Employee employee = new Employee(1, "henry", "male");
+        EmployeeRequest employee = new EmployeeRequest(1, "henry", "male");
         //when
-        Employee updatedEmployee = employeeService.updateEmployee(employeeId, employee);
+        EmployeeResponse updatedEmployee = employeeService.updateEmployee(employeeId, employee);
         //then
         assertEquals(employeeId, updatedEmployee.getId());
     }

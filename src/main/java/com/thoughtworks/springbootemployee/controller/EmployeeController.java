@@ -1,5 +1,7 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.dto.EmployeeRequest;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
@@ -20,35 +22,35 @@ public class EmployeeController {
 
 
     @GetMapping
-    public List<Employee> getEmployeeInformation() {
+    public List<EmployeeResponse> getEmployeeInformation() {
         return employeeService.getAllEmployees();
     }
 
     @GetMapping(params = {"gender"})
-    public List<Employee> getEmployeesByGender(@RequestParam(name = "gender", required = false) String gender) {
+    public List<EmployeeResponse> getEmployeesByGender(@RequestParam(name = "gender", required = false) String gender) {
         return employeeService.getEmployeesByGender(gender);
     }
 
     @GetMapping(params = {"page", "pageSize"})
-    public Page<Employee> getEmployeesByPage(@RequestParam(name = "page", required = false) Integer page,
-                                             @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+    public Page<EmployeeResponse> getEmployeesByPage(@RequestParam(name = "page", required = false) Integer page,
+                                                     @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         return employeeService.getEmployeesByPage(page, pageSize);
     }
 
 
     @GetMapping("/{id}")
-    public Employee getCertainEmployee(@PathVariable Integer id) throws GlobalException {
+    public EmployeeResponse getCertainEmployee(@PathVariable Integer id) throws GlobalException {
         return employeeService.getCertainEmployee(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee addEmployee(@RequestBody Employee employee) {
-        return employeeService.addNewEmployee(employee);
+    public EmployeeResponse addEmployee(@RequestBody EmployeeRequest employeeRequest) {
+        return employeeService.addNewEmployee(employeeRequest);
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployeeInformation(@PathVariable Integer id, @RequestBody Employee employee) throws GlobalException {
+    public EmployeeResponse updateEmployeeInformation(@PathVariable Integer id, @RequestBody EmployeeRequest employee) throws GlobalException {
         return employeeService.updateEmployee(id, employee);
     }
 
