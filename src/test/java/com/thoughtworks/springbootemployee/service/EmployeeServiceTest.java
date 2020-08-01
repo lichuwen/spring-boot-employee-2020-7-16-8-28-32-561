@@ -73,7 +73,7 @@ public class EmployeeServiceTest {
         Integer page = 1;
         Integer pageSize = 2;
         //when
-        Page<Employee> employeesByPage = employeeService.getEmployeesByPage(page, pageSize);
+        Page<EmployeeResponse> employeesByPage = employeeService.getEmployeesByPage(page, pageSize);
         //then
         assertNotNull(employeesByPage);
     }

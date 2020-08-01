@@ -9,6 +9,7 @@ import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -44,8 +45,13 @@ public class EmployeeService {
         }
     }
 
-    public Page<Employee> getEmployeesByPage(Integer page, Integer pageSize) {
-        return employeeRepository.findAll(PageRequest.of(page - 1, pageSize));
+    public Page<EmployeeResponse> getEmployeesByPage(Integer page, Integer pageSize) {
+        Page<Employee> employees = employeeRepository.findAll(PageRequest.of(page - 1, pageSize));
+        List<EmployeeResponse> employeeResponses = new ArrayList<>();
+        for (Employee employee : employees) {
+            employeeResponses.add(mapper.toEmployeeDto(employee));
+        }
+        return new PageImpl<>(employeeResponses);
     }
 
     public List<Employee> getEmployeesByGender(String gender) {
