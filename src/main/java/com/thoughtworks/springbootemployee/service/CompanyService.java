@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.service;
 
 
 import com.thoughtworks.springbootemployee.Enum.ResultEnum;
+import com.thoughtworks.springbootemployee.dto.CompanyRequest;
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
@@ -42,6 +43,7 @@ public class CompanyService {
         }
     }
 
+    //todo
     public List<Employee> getEmployeesInCompany(Integer companyId) throws GlobalException {
         Optional<Company> byId = companyRepository.findById(companyId);
         if (byId.isPresent()) {
@@ -51,13 +53,14 @@ public class CompanyService {
         }
     }
 
+    //todo
     public Page<Company> getCompaniesByPage(Integer page, Integer pageSize) {
         return companyRepository.findAll(PageRequest.of(page-1, pageSize));
     }
 
 
-    public Company addNewCompany(Company company) {
-        return companyRepository.save(company);
+    public CompanyResponse addNewCompany(CompanyRequest company) {
+        return companyMapper.toCompanyDto(companyRepository.save(companyMapper.toCompany(company)));
     }
 
     public Company updateCompany(Integer companyId, Company company) throws GlobalException {

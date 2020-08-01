@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Enum.ResultEnum;
+import com.thoughtworks.springbootemployee.dto.CompanyRequest;
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
@@ -104,10 +105,10 @@ public class CompanyServiceTest {
     @Test
     void should_add_a_company_when_add_new_company_given_company() {
         //given
-        Company company = new Company(3, 1, "OOCL", Collections.singletonList(new Employee(7, "henry", "male")));
+        CompanyRequest company = new CompanyRequest(3, 1, "OOCL", Collections.singletonList(new Employee(7, "henry", "male")));
 
         //when
-        Company newCompany = companyService.addNewCompany(company);
+        CompanyResponse newCompany = companyService.addNewCompany(company);
 
         //then
         //todo
