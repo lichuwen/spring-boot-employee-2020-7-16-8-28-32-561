@@ -1,27 +1,38 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Enum.ResultEnum;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
+    private final EmployeeMapper mapper;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper mapper) {
         this.employeeRepository = employeeRepository;
+        this.mapper = mapper;
     }
 
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public List<EmployeeResponse> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        List<EmployeeResponse> employeeResponses = new ArrayList<>();
+        for (Employee employee : employees) {
+            employeeResponses.add(mapper.toEmployeeDto(employee));
+        }
+        return employeeResponses;
     }
 
     public Employee getCertainEmployee(Integer employeeId) throws GlobalException {

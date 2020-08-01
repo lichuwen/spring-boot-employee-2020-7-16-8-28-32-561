@@ -1,6 +1,8 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,15 +33,16 @@ public class EmployeeServiceTest {
         when(employeeRepository.findByGender("male")).thenReturn(Arrays.asList(
                 new Employee(1, "xiaoming", "male"),
                 new Employee(4, "xiaoming-02", "male")));
-        when(employeeRepository.save(any(Employee.class))).thenReturn(new Employee(1,"xiaoming","male"));
-        this.employeeService = new EmployeeService(employeeRepository);
+        when(employeeRepository.save(any(Employee.class))).thenReturn(new Employee(1, "xiaoming", "male"));
+        EmployeeMapper employeeMapper = new EmployeeMapper();
+        this.employeeService = new EmployeeService(employeeRepository, employeeMapper);
     }
 
 
     @Test
     void should_return_employee_list_when_get_all_employees() {
         //when
-        List<Employee> employees = employeeService.getAllEmployees();
+        List<EmployeeResponse> employees = employeeService.getAllEmployees();
         //then
         assertTrue(employees.size() > 0);
     }
