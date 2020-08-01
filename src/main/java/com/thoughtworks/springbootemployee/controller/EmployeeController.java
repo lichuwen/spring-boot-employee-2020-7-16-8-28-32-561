@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
@@ -20,7 +21,7 @@ public class EmployeeController {
 
 
     @GetMapping
-    public List<Employee> getEmployeeInformation() {
+    public List<EmployeeResponse> getEmployeeInformation() {
         return employeeService.getAllEmployees();
     }
 

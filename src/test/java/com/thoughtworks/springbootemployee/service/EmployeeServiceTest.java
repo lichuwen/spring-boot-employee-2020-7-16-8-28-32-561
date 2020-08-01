@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
@@ -39,7 +40,7 @@ public class EmployeeServiceTest {
     @Test
     void should_return_employee_list_when_get_all_employees() {
         //when
-        List<Employee> employees = employeeService.getAllEmployees();
+        List<EmployeeResponse> employees = employeeService.getAllEmployees();
         //then
         assertTrue(employees.size() > 0);
     }
