@@ -119,10 +119,10 @@ public class CompanyServiceTest {
     void should_update_a_company_when_update_company_given_company_and_company_id() throws GlobalException {
         //given
         Integer companyId = 1;
-        Company company = new Company(1, 1000, "OOCL", new ArrayList<>());
+        CompanyRequest company = new CompanyRequest(1, 1000, "OOCL", new ArrayList<>());
 
         //when
-        Company updatedCompany = companyService.updateCompany(companyId, company);
+        CompanyResponse updatedCompany = companyService.updateCompany(companyId, company);
         //then
         assertEquals(companyId, updatedCompany.getCompanyID());
     }
@@ -130,7 +130,7 @@ public class CompanyServiceTest {
     @Test
     void should_throw_gloable_exception_when_update_company_given_company_id_which_not_exist() {
         Integer notExistCompanyId = 2;
-        GlobalException globalException = assertThrows(GlobalException.class, () -> companyService.updateCompany(2, new Company()));
+        GlobalException globalException = assertThrows(GlobalException.class, () -> companyService.updateCompany(2, new CompanyRequest()));
         assertEquals(ResultEnum.DATA_NOT_FOUND.getMsg(), globalException.getMsg());
     }
 

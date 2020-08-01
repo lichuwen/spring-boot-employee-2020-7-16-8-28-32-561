@@ -63,12 +63,12 @@ public class CompanyService {
         return companyMapper.toCompanyDto(companyRepository.save(companyMapper.toCompany(company)));
     }
 
-    public Company updateCompany(Integer companyId, Company company) throws GlobalException {
+    public CompanyResponse updateCompany(Integer companyId, CompanyRequest company) throws GlobalException {
         Optional<Company> byId = companyRepository.findById(companyId);
         if (byId.isPresent()) {
             Company oldCompany = byId.get();
             BeanUtils.copyProperties(company, oldCompany);
-            return companyRepository.save(oldCompany);
+            return companyMapper.toCompanyDto(companyRepository.save(oldCompany));
         } else {
             throw new GlobalException(ResultEnum.DATA_NOT_FOUND.getMsg());
         }

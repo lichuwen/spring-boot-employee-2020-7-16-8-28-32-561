@@ -50,7 +50,7 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public Company updateCompanyInformation(@PathVariable Integer id, @RequestBody Company company) throws GlobalException {
+    public CompanyResponse updateCompanyInformation(@PathVariable Integer id, @RequestBody CompanyRequest company) throws GlobalException {
         return companyService.updateCompany(id, company);
     }
 
