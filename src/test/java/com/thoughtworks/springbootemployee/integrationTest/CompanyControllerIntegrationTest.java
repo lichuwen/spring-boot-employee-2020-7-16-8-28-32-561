@@ -93,4 +93,18 @@ public class CompanyControllerIntegrationTest {
                 .andExpect(jsonPath("$.companyName").value(company.getCompanyName()))
                 .andExpect(jsonPath("$.employees.length()").value(company.getEmployees().size()));
     }
+
+    @Test
+    void should_get_employees_when_hit_get_company_given_id() throws Exception{
+        Company company = companyRepository.save(companyList.get(0));
+        mockMvc.perform(get("/companies/"+company.getCompanyID()+"/employees"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(company.getEmployees().size()))
+                .andExpect(jsonPath("$[0].id").value(company.getEmployees().get(0).getId()))
+                .andExpect(jsonPath("$[0].name").value(company.getEmployees().get(0).getName()))
+                .andExpect(jsonPath("$[0].gender").value(company.getEmployees().get(0).getGender()))
+                .andExpect(jsonPath("$[1].id").value(company.getEmployees().get(1).getId()))
+                .andExpect(jsonPath("$[1].name").value(company.getEmployees().get(1).getName()))
+                .andExpect(jsonPath("$[1].gender").value(company.getEmployees().get(1).getGender()));
+    }
 }
