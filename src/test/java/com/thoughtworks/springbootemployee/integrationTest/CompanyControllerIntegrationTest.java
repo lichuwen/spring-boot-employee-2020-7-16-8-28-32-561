@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @ProjectName: spring-boot-employee
@@ -52,6 +53,7 @@ public class CompanyControllerIntegrationTest {
         mockMvc.perform(get("/companies")
                 .param("page","1")
                 .param("pageSize","2"))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(2))
                 .andExpect(jsonPath("$.content[0].companyID").value(company1.getCompanyID()))
                 .andExpect(jsonPath("$.content[0].employeesNumber").value(company1.getEmployeesNumber()))
@@ -69,6 +71,7 @@ public class CompanyControllerIntegrationTest {
         Company company1 = companyRepository.save(companyList.get(0));
         Company company2 = companyRepository.save(companyList.get(1));
         mockMvc.perform(get("/companies"))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].companyID").value(company1.getCompanyID()))
                 .andExpect(jsonPath("$[0].employeesNumber").value(company1.getEmployeesNumber()))
@@ -84,6 +87,7 @@ public class CompanyControllerIntegrationTest {
     void should_get_company_when_hit_get_company_given_id() throws Exception {
         Company company = companyRepository.save(companyList.get(0));
         mockMvc.perform(get("/companies/"+company.getCompanyID()))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.companyID").value(company.getCompanyID()))
                 .andExpect(jsonPath("$.employeesNumber").value(company.getEmployeesNumber()))
                 .andExpect(jsonPath("$.companyName").value(company.getCompanyName()))
