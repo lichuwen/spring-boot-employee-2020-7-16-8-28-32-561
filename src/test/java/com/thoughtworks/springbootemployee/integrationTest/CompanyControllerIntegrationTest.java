@@ -14,9 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @SpringBootTest
@@ -125,7 +125,7 @@ public class CompanyControllerIntegrationTest {
     void should_update_company_when_hit_put_company_endpoint_given_company() throws Exception {
         Company company = companyRepository.save(companyList.get(0));
         String requestBody = "{\"companyName\":\"OOCL-update\",\"companyID\":1,\"employeesNumber\":2,\"employees\":[{\"id\":1,\"name\":\"woody\",\"gender\":\"male\"},{\"id\":2,\"name\":\"karen\",\"gender\":\"female\"}]}";
-        mockMvc.perform(put("/companies/"+company.getCompanyID())
+        mockMvc.perform(put("/companies/" + company.getCompanyID())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isOk())
@@ -134,4 +134,15 @@ public class CompanyControllerIntegrationTest {
                 .andExpect(jsonPath("$.employees.length()").value(2));
 
     }
+
+    @Test
+    void should_delete_company_when_hit_delete_company_endpoint_given_company_id() throws Exception {
+        Company company = companyRepository.save(companyList.get(0));
+        mockMvc.perform(delete("/companies/" + company.getCompanyID()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("success"));
+        List<Company> all = companyRepository.findAll();
+        assertEquals(0,all.size());
+    }
+
 }
