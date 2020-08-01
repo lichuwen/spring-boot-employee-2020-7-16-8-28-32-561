@@ -4,8 +4,10 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.Enum.ResultEnum;
 import com.thoughtworks.springbootemployee.dto.CompanyRequest;
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -24,10 +26,12 @@ import java.util.stream.Collectors;
 public class CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
+    private final EmployeeMapper employeeMapper;
 
-    public CompanyService(CompanyRepository companyRepository, CompanyMapper companyMapper) {
+    public CompanyService(CompanyRepository companyRepository, CompanyMapper companyMapper, EmployeeMapper employeeMapper) {
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
+        this.employeeMapper = employeeMapper;
     }
 
     public List<CompanyResponse> getAllCompanies() {
@@ -43,11 +47,10 @@ public class CompanyService {
         }
     }
 
-    //todo
-    public List<Employee> getEmployeesInCompany(Integer companyId) throws GlobalException {
+    public List<EmployeeResponse> getEmployeesInCompany(Integer companyId) throws GlobalException {
         Optional<Company> byId = companyRepository.findById(companyId);
         if (byId.isPresent()) {
-            return byId.get().getEmployees();
+            return byId.get().getEmployees().stream().map(employeeMapper::toEmployeeDto).collect(Collectors.toList());
         } else {
             throw new GlobalException(ResultEnum.DATA_NOT_FOUND.getMsg());
         }

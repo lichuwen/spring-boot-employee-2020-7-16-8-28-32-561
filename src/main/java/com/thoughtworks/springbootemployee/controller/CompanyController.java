@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.dto.CompanyRequest;
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -39,7 +40,7 @@ public class CompanyController {
     }
 
     @GetMapping(path = "/{id}/employees")
-    public List<Employee> getEmployeesInCompany(@PathVariable int id) throws GlobalException {
+    public List<EmployeeResponse> getEmployeesInCompany(@PathVariable int id) throws GlobalException {
         return companyService.getEmployeesInCompany(id);
     }
 

@@ -3,8 +3,10 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.Enum.ResultEnum;
 import com.thoughtworks.springbootemployee.dto.CompanyRequest;
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -48,7 +50,8 @@ public class CompanyServiceTest {
         when(companyRepository.findById(1)).thenReturn(Optional.of(new Company(1, 3, "OOCL", Collections.singletonList(new Employee(4, "xiaoming-02", "male")))));
         when(companyRepository.save(any(Company.class))).thenReturn(new Company(1, 3, "ThoughtWorks", Collections.singletonList(new Employee(4, "xiaoming-02", "male"))));
         CompanyMapper companyMapper = new CompanyMapper();
-        companyService = new CompanyService(companyRepository,companyMapper);
+        EmployeeMapper employeeMapper = new EmployeeMapper();
+        companyService = new CompanyService(companyRepository,companyMapper,employeeMapper);
     }
 
     @Test
@@ -81,7 +84,7 @@ public class CompanyServiceTest {
         //given
         Integer companyId = 1;
         //when
-        List<Employee> employees = companyService.getEmployeesInCompany(companyId);
+        List<EmployeeResponse> employees = companyService.getEmployeesInCompany(companyId);
         //then
         //todo
         assertTrue(employees.size() > 0);
