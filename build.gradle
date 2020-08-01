@@ -30,6 +30,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+    compile group: 'org.flywaydb', name: 'flyway-core', version: '6.5.3'
 }
 
 group = 'com.thoughtworks'

@@ -1,6 +1,5 @@
 package com.thoughtworks.springbootemployee.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,5 +21,10 @@ public class Company {
     private String companyName;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = EAGER)
+    @JoinTable(name = "company_employees", joinColumns = {
+            @JoinColumn(name = "company_companyid")
+    }, inverseJoinColumns = {
+            @JoinColumn(name = "employees_id")
+    })
     List<Employee> employees;
 }
