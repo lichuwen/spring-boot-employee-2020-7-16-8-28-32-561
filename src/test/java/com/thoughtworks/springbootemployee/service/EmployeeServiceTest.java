@@ -52,7 +52,7 @@ public class EmployeeServiceTest {
         //given
         Integer employeeId = 1;
         //when
-        Employee employee = employeeService.getCertainEmployee(employeeId);
+        EmployeeResponse employee = employeeService.getCertainEmployee(employeeId);
         //then
         assertNotNull(employee);
         assertEquals(employeeId, employee.getId());

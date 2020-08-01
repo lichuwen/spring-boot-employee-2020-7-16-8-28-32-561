@@ -35,10 +35,10 @@ public class EmployeeService {
         return employeeResponses;
     }
 
-    public Employee getCertainEmployee(Integer employeeId) throws GlobalException {
+    public EmployeeResponse getCertainEmployee(Integer employeeId) throws GlobalException {
         Optional<Employee> employee = employeeRepository.findById(employeeId);
         if (employee.isPresent()) {
-            return employee.get();
+            return mapper.toEmployeeDto(employee.get());
         } else {
             throw new GlobalException(ResultEnum.DATA_NOT_FOUND.getMsg());
         }

@@ -38,7 +38,7 @@ public class EmployeeController {
 
 
     @GetMapping("/{id}")
-    public Employee getCertainEmployee(@PathVariable Integer id) throws GlobalException {
+    public EmployeeResponse getCertainEmployee(@PathVariable Integer id) throws GlobalException {
         return employeeService.getCertainEmployee(id);
     }
 
