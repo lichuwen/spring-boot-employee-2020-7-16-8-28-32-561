@@ -3,16 +3,20 @@ package com.thoughtworks.springbootemployee.integrationTest;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -106,5 +110,25 @@ public class CompanyControllerIntegrationTest {
                 .andExpect(jsonPath("$[1].id").value(company.getEmployees().get(1).getId()))
                 .andExpect(jsonPath("$[1].name").value(company.getEmployees().get(1).getName()))
                 .andExpect(jsonPath("$[1].gender").value(company.getEmployees().get(1).getGender()));
+    }
+
+    @Test
+    void should_add_company_when_hit_post_company_endpoint_given_company() throws Exception {
+        String requestBody = "{\"companyName\":\"OOCL\",\"companyID\":1,\"employeesNumber\":2,\"employees\":[{\"id\":1,\"name\":\"woody\",\"gender\":\"male\"},{\"id\":2,\"name\":\"karen\",\"gender\":\"female\"}]}";
+        mockMvc.perform(post("/companies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.companyID").value(1))
+                .andExpect(jsonPath("$.employeesNumber").value(2))
+                .andExpect(jsonPath("$.companyName").value("OOCL"))
+                .andExpect(jsonPath("$.employees.length()").value(2));
+        List<Company> all = companyRepository.findAll();
+        assertEquals(1,all.size());
+        assertEquals("OOCL",all.get(0).getCompanyName());
+        assertEquals(1,all.get(0).getCompanyID());
+        assertEquals(2,all.get(0).getEmployeesNumber());
+
     }
 }
