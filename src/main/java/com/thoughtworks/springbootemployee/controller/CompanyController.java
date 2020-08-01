@@ -33,7 +33,7 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public Company getCertainCompany(@PathVariable Integer id) throws GlobalException {
+    public CompanyResponse getCertainCompany(@PathVariable Integer id) throws GlobalException {
         return companyService.getCertainCompany(id);
     }
 

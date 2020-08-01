@@ -67,7 +67,7 @@ public class CompanyServiceTest {
         //given
         Integer companyId = 1;
         //when
-        Company company = companyService.getCertainCompany(companyId);
+        CompanyResponse company = companyService.getCertainCompany(companyId);
         //then
         assertNotNull(company);
         assertEquals(companyId, company.getCompanyID());

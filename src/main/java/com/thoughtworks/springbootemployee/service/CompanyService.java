@@ -33,10 +33,10 @@ public class CompanyService {
         return companyRepository.findAll().stream().map(companyMapper::toCompanyDto).collect(Collectors.toList());
     }
 
-    public Company getCertainCompany(Integer companyId) throws GlobalException {
+    public CompanyResponse getCertainCompany(Integer companyId) throws GlobalException {
         Optional<Company> company = companyRepository.findById(companyId);
         if (company.isPresent()) {
-            return company.get();
+            return companyMapper.toCompanyDto(company.get());
         } else {
             throw new GlobalException(ResultEnum.DATA_NOT_FOUND.getMsg());
         }
