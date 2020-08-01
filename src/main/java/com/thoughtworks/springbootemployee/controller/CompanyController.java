@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.dto.CompanyResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -27,7 +28,7 @@ public class CompanyController {
     }
 
     @GetMapping
-    public List<Company> getCompanyInformation() {
+    public List<CompanyResponse> getCompanyInformation() {
         return companyService.getAllCompanies();
     }
 

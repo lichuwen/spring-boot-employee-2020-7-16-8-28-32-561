@@ -1,7 +1,9 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Enum.ResultEnum;
+import com.thoughtworks.springbootemployee.dto.CompanyResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
+import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -44,13 +46,14 @@ public class CompanyServiceTest {
         when(companyRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
         when(companyRepository.findById(1)).thenReturn(Optional.of(new Company(1, 3, "OOCL", Collections.singletonList(new Employee(4, "xiaoming-02", "male")))));
         when(companyRepository.save(any(Company.class))).thenReturn(new Company(1, 3, "ThoughtWorks", Collections.singletonList(new Employee(4, "xiaoming-02", "male"))));
-        companyService = new CompanyService(companyRepository);
+        CompanyMapper companyMapper = new CompanyMapper();
+        companyService = new CompanyService(companyRepository,companyMapper);
     }
 
     @Test
     public void should_return_companyList_when_get_all_companies() {
         //given
-        List<Company> companyList;
+        List<CompanyResponse> companyList;
         //when
         companyList = companyService.getAllCompanies();
         //then

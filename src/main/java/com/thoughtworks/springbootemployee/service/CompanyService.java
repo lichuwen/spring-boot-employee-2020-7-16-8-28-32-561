@@ -2,29 +2,35 @@ package com.thoughtworks.springbootemployee.service;
 
 
 import com.thoughtworks.springbootemployee.Enum.ResultEnum;
+import com.thoughtworks.springbootemployee.dto.CompanyResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
+import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
 public class CompanyService {
     private final CompanyRepository companyRepository;
+    private final CompanyMapper companyMapper;
 
-    public CompanyService(CompanyRepository companyRepository) {
+    public CompanyService(CompanyRepository companyRepository, CompanyMapper companyMapper) {
         this.companyRepository = companyRepository;
+        this.companyMapper = companyMapper;
     }
 
-    public List<Company> getAllCompanies() {
-        return companyRepository.findAll();
+    public List<CompanyResponse> getAllCompanies() {
+        return companyRepository.findAll().stream().map(companyMapper::toCompanyDto).collect(Collectors.toList());
     }
 
     public Company getCertainCompany(Integer companyId) throws GlobalException {
