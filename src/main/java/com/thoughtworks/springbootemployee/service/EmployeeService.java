@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Enum.ResultEnum;
+import com.thoughtworks.springbootemployee.dto.EmployeeRequest;
 import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -60,8 +61,9 @@ public class EmployeeService {
         return employees.stream().map(employee -> mapper.toEmployeeDto(employee)).collect(Collectors.toList());
     }
 
-    public Employee addNewEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeResponse addNewEmployee(EmployeeRequest employeeRequest) {
+        Employee employee = mapper.toEmployee(employeeRequest);
+        return mapper.toEmployeeDto(employeeRepository.save(employee));
     }
 
     public Employee updateEmployee(Integer employeeId, Employee employee) throws GlobalException {

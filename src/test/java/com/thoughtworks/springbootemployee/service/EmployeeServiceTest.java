@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.dto.EmployeeRequest;
 import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
@@ -92,10 +93,10 @@ public class EmployeeServiceTest {
     @Test
     void should_add_a_employee_when_add_new_employee_given_employee() {
         //given
-        Employee employee = new Employee(7, "henry", "male");
+        EmployeeRequest employee = new EmployeeRequest(7, "henry", "male");
 
         //when
-        Employee newEmployee = employeeService.addNewEmployee(employee);
+        EmployeeResponse newEmployee = employeeService.addNewEmployee(employee);
 
         //then
         assertNotNull(newEmployee);
