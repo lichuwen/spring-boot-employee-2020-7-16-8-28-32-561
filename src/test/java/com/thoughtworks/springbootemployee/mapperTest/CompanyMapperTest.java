@@ -2,12 +2,8 @@ package com.thoughtworks.springbootemployee.mapperTest;
 
 import com.thoughtworks.springbootemployee.dto.CompanyRequest;
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
-import com.thoughtworks.springbootemployee.dto.EmployeeRequest;
-import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.model.Company;
-import com.thoughtworks.springbootemployee.model.Employee;
-import mapper.CompanyMapper;
-import mapper.EmployeeMapper;
+import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
