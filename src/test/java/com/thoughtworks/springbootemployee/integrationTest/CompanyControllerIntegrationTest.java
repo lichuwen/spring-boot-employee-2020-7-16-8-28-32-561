@@ -3,6 +3,8 @@ package com.thoughtworks.springbootemployee.integrationTest;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,6 +29,8 @@ public class CompanyControllerIntegrationTest {
 
     @Autowired
     CompanyRepository companyRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
 
     private final List<Company> companyList = Arrays.asList(new Company(1, 3, "OOCL",
             Arrays.asList(
@@ -39,6 +43,13 @@ public class CompanyControllerIntegrationTest {
                     new Employee(5, "karen-02", "female"),
                     new Employee(6, "jeany-02", "female")
             )));
+
+    @AfterEach
+    void tearDown() {
+        companyRepository.deleteAll();
+        employeeRepository.deleteAll();
+        assertEquals(0,companyRepository.findAll().size());
+    }
 
     @Test
     void should_get_company_page_when_hit_get_company_given_page_and_pageSize() throws Exception {
@@ -57,6 +68,8 @@ public class CompanyControllerIntegrationTest {
                 .andExpect(jsonPath("$.content[1].employeesNumber").value(company2.getEmployeesNumber()))
                 .andExpect(jsonPath("$.content[1].companyName").value(company2.getCompanyName()))
                 .andExpect(jsonPath("$.content[1].employees.length()").value(company2.getEmployees().size()));
+        companyRepository.deleteAll();
+        assertEquals(0,companyRepository.findAll().size());
     }
 
 
