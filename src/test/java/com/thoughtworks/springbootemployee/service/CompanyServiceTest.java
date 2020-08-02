@@ -1,7 +1,10 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Enum.ResultEnum;
+import com.thoughtworks.springbootemployee.dto.CompanyRequest;
+import com.thoughtworks.springbootemployee.dto.CompanyResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
+import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -44,13 +47,14 @@ public class CompanyServiceTest {
         when(companyRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
         when(companyRepository.findById(1)).thenReturn(Optional.of(new Company(1, 3, "OOCL", Collections.singletonList(new Employee(4, "xiaoming-02", "male")))));
         when(companyRepository.save(any(Company.class))).thenReturn(new Company(1, 3, "ThoughtWorks", Collections.singletonList(new Employee(4, "xiaoming-02", "male"))));
-        companyService = new CompanyService(companyRepository);
+        CompanyMapper companyMapper = new CompanyMapper();
+        companyService = new CompanyService(companyRepository,companyMapper);
     }
 
     @Test
     public void should_return_companyList_when_get_all_companies() {
         //given
-        List<Company> companyList;
+        List<CompanyResponse> companyList;
         //when
         companyList = companyService.getAllCompanies();
         //then
@@ -64,7 +68,7 @@ public class CompanyServiceTest {
         //given
         Integer companyId = 1;
         //when
-        Company company = companyService.getCertainCompany(companyId);
+        CompanyResponse company = companyService.getCertainCompany(companyId);
         //then
         assertNotNull(company);
         assertEquals(companyId, company.getCompanyID());
@@ -101,10 +105,10 @@ public class CompanyServiceTest {
     @Test
     void should_add_a_company_when_add_new_company_given_company() {
         //given
-        Company company = new Company(3, 1, "OOCL", Collections.singletonList(new Employee(7, "henry", "male")));
+        CompanyRequest company = new CompanyRequest(3, 1, "OOCL", Collections.singletonList(new Employee(7, "henry", "male")));
 
         //when
-        Company newCompany = companyService.addNewCompany(company);
+        CompanyResponse newCompany = companyService.addNewCompany(company);
 
         //then
         //todo
@@ -115,10 +119,10 @@ public class CompanyServiceTest {
     void should_update_a_company_when_update_company_given_company_and_company_id() throws GlobalException {
         //given
         Integer companyId = 1;
-        Company company = new Company(1, 1000, "OOCL", new ArrayList<>());
+        CompanyRequest company = new CompanyRequest(1, 1000, "OOCL", new ArrayList<>());
 
         //when
-        Company updatedCompany = companyService.updateCompany(companyId, company);
+        CompanyResponse updatedCompany = companyService.updateCompany(companyId, company);
         //then
         assertEquals(companyId, updatedCompany.getCompanyID());
     }
@@ -126,7 +130,7 @@ public class CompanyServiceTest {
     @Test
     void should_throw_gloable_exception_when_update_company_given_company_id_which_not_exist() {
         Integer notExistCompanyId = 2;
-        GlobalException globalException = assertThrows(GlobalException.class, () -> companyService.updateCompany(2, new Company()));
+        GlobalException globalException = assertThrows(GlobalException.class, () -> companyService.updateCompany(2, new CompanyRequest()));
         assertEquals(ResultEnum.DATA_NOT_FOUND.getMsg(), globalException.getMsg());
     }
 

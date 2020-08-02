@@ -1,5 +1,7 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.dto.CompanyRequest;
+import com.thoughtworks.springbootemployee.dto.CompanyResponse;
 import com.thoughtworks.springbootemployee.exception.GlobalException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -27,12 +29,12 @@ public class CompanyController {
     }
 
     @GetMapping
-    public List<Company> getCompanyInformation() {
+    public List<CompanyResponse> getCompanyInformation() {
         return companyService.getAllCompanies();
     }
 
     @GetMapping("/{id}")
-    public Company getCertainCompany(@PathVariable Integer id) throws GlobalException {
+    public CompanyResponse getCertainCompany(@PathVariable Integer id) throws GlobalException {
         return companyService.getCertainCompany(id);
     }
 
@@ -43,12 +45,12 @@ public class CompanyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Company addCompany(@RequestBody Company company) {
+    public CompanyResponse addCompany(@RequestBody CompanyRequest company) {
         return companyService.addNewCompany(company);
     }
 
     @PutMapping("/{id}")
-    public Company updateCompanyInformation(@PathVariable Integer id, @RequestBody Company company) throws GlobalException {
+    public CompanyResponse updateCompanyInformation(@PathVariable Integer id, @RequestBody CompanyRequest company) throws GlobalException {
         return companyService.updateCompany(id, company);
     }
 
