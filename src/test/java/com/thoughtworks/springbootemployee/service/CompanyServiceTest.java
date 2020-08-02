@@ -98,7 +98,7 @@ public class CompanyServiceTest {
         Integer pageSize = 2;
 
         //when
-        Page<Company> companiesByPage = companyService.getCompaniesByPage(page, pageSize);
+        Page<CompanyResponse> companiesByPage = companyService.getCompaniesByPage(page, pageSize);
         //then
         //todo
         assertNotNull(companiesByPage);

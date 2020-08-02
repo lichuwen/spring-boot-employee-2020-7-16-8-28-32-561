@@ -14,6 +14,7 @@ import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -57,8 +58,9 @@ public class CompanyService {
     }
 
     //todo
-    public Page<Company> getCompaniesByPage(Integer page, Integer pageSize) {
-        return companyRepository.findAll(PageRequest.of(page-1, pageSize));
+    public Page<CompanyResponse> getCompaniesByPage(Integer page, Integer pageSize) {
+        Page<Company> all = companyRepository.findAll(PageRequest.of(page - 1, pageSize));
+        return new PageImpl<>(all.getContent().stream().map(companyMapper::toCompanyDto).collect(Collectors.toList()));
     }
 
 
