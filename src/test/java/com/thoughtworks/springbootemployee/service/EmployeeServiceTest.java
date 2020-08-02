@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,9 +36,8 @@ public class EmployeeServiceTest {
     public void init() {
         EmployeeRepository employeeRepository = Mockito.mock(EmployeeRepository.class);
         when(employeeRepository.findById(1)).thenReturn(Optional.of(employeeList.get(0)));
-        when(employeeRepository.findAll(any(Pageable.class))).thenReturn((new PageImpl<>(Arrays.asList(
-                employeeList.get(0),
-                employeeList.get(1)))));
+        when(employeeRepository.findAll(any(Pageable.class))).thenReturn((new PageImpl<>(Collections.singletonList(
+                employeeList.get(0)))));
         when(employeeRepository.findAll()).thenReturn(Arrays.asList(
                 employeeList.get(0),
                 employeeList.get(1)));
@@ -84,7 +84,7 @@ public class EmployeeServiceTest {
         //when
         Page<EmployeeResponse> employeesByPage = employeeService.getEmployeesByPage(page, pageSize);
         //then
-        assertEquals(employeesByPage.getContent(), employeeList.get(0));
+        assertEquals(employeesByPage.getContent().get(0), employeeMapper.toEmployeeDto(employeeList.get(0)));
     }
 
     @Test
