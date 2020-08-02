@@ -10,11 +10,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,19 +26,25 @@ import static org.mockito.Mockito.when;
 public class EmployeeServiceTest {
     EmployeeService employeeService;
 
+    private final List<Employee> employeeList = Arrays.asList(
+            new Employee(1, "xiaoming", "male"),
+            new Employee(4, "xiaoming-02", "male")
+    );
+    private final EmployeeMapper employeeMapper = new EmployeeMapper();
+
     @BeforeEach
     public void init() {
         EmployeeRepository employeeRepository = Mockito.mock(EmployeeRepository.class);
-        when(employeeRepository.findById(1)).thenReturn(Optional.of(new Employee(1, "xiaoming", "male")));
-        when(employeeRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
+        when(employeeRepository.findById(1)).thenReturn(Optional.of(employeeList.get(0)));
+        when(employeeRepository.findAll(any(Pageable.class))).thenReturn((new PageImpl<>(Collections.singletonList(
+                employeeList.get(0)))));
         when(employeeRepository.findAll()).thenReturn(Arrays.asList(
-                new Employee(1, "xiaoming", "male"),
-                new Employee(4, "xiaoming-02", "male")));
+                employeeList.get(0),
+                employeeList.get(1)));
         when(employeeRepository.findByGender("male")).thenReturn(Arrays.asList(
-                new Employee(1, "xiaoming", "male"),
-                new Employee(4, "xiaoming-02", "male")));
-        when(employeeRepository.save(any(Employee.class))).thenReturn(new Employee(1, "xiaoming", "male"));
-        EmployeeMapper employeeMapper = new EmployeeMapper();
+                employeeList.get(0),
+                employeeList.get(1)));
+        when(employeeRepository.save(any(Employee.class))).thenReturn(employeeList.get(0));
         this.employeeService = new EmployeeService(employeeRepository, employeeMapper);
     }
 
@@ -45,7 +54,7 @@ public class EmployeeServiceTest {
         //when
         List<EmployeeResponse> employees = employeeService.getAllEmployees();
         //then
-        assertTrue(employees.size() > 0);
+        assertIterableEquals(employeeList.stream().map(employeeMapper::toEmployeeDto).collect(Collectors.toList()), employees);
     }
 
     @Test
@@ -55,8 +64,7 @@ public class EmployeeServiceTest {
         //when
         EmployeeResponse employee = employeeService.getCertainEmployee(employeeId);
         //then
-        assertNotNull(employee);
-        assertEquals(employeeId, employee.getId());
+        assertEquals(employeeMapper.toEmployeeDto(employeeList.get(0)), employee);
     }
 
     @Test
@@ -72,11 +80,11 @@ public class EmployeeServiceTest {
     void should_return_employees_by_page_when_get_employees_by_page_given_page_and_page_size() {
         //given
         Integer page = 1;
-        Integer pageSize = 2;
+        Integer pageSize = 1;
         //when
         Page<EmployeeResponse> employeesByPage = employeeService.getEmployeesByPage(page, pageSize);
         //then
-        assertNotNull(employeesByPage);
+        assertEquals(employeesByPage.getContent().get(0), employeeMapper.toEmployeeDto(employeeList.get(0)));
     }
 
     @Test
@@ -86,20 +94,20 @@ public class EmployeeServiceTest {
         //when
         List<EmployeeResponse> employeesByGender = employeeService.getEmployeesByGender(gender);
         //then
-        assertTrue(employeesByGender.size()>0);
-        assertEquals(gender,employeesByGender.get(0).getGender());
+        assertEquals(employeeList.stream().map(employeeMapper::toEmployeeDto).collect(Collectors.toList()), employeesByGender);
     }
 
     @Test
     void should_add_a_employee_when_add_new_employee_given_employee() {
         //given
-        EmployeeRequest employee = new EmployeeRequest(7, "henry", "male");
+        EmployeeRequest employee = new EmployeeRequest(1, "xiaoming", "male");
 
         //when
         EmployeeResponse newEmployee = employeeService.addNewEmployee(employee);
 
         //then
-        assertNotNull(newEmployee);
+        EmployeeResponse oldEmployee = employeeMapper.toEmployeeDto(employeeMapper.toEmployee(employee));
+        assertEquals(oldEmployee, newEmployee);
     }
 
     @Test
@@ -107,10 +115,11 @@ public class EmployeeServiceTest {
         //given
         Integer employeeId = 1;
         EmployeeRequest employee = new EmployeeRequest(1, "henry", "male");
+        EmployeeResponse oldEmployee = employeeMapper.toEmployeeDto(employeeMapper.toEmployee(employee));
         //when
         EmployeeResponse updatedEmployee = employeeService.updateEmployee(employeeId, employee);
         //then
-        assertEquals(employeeId, updatedEmployee.getId());
+        assertEquals(oldEmployee, updatedEmployee);
     }
 
     @Test
